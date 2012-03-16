@@ -1,0 +1,31 @@
+{
+	"folders":
+	[
+		{
+			"path": "project"
+		}
+	],
+
+	"settings":
+	{
+	    "sublimeclang_additional_language_options":
+	    {
+	        "c++" : ["-std=c++11"]
+	    },
+
+	    "sublimeclang_options":
+	    [
+	        "-Wall",
+	        "-I/usr/lib/clang/3.0/include/",
+	        "-I/usr/lib/clang/2.1/include/",
+	        "-I/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/",
+	        "-I/usr/lib/gcc/i686-apple-darwin11/4.2.1/include/",
+	        // If you code for iOS, you want to have something like the following here:
+	        //"-isysroot",
+	        //"/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.3.sdk",
+	        //"-D__IPHONE_OS_VERSION_MIN_REQUIRED=40300",
+	        "-IC:/MinGW/include",
+	        "-I${folder:${project_path:Makefile}}/src"
+	    ]
+	}
+}
