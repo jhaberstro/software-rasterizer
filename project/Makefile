@@ -1,14 +1,17 @@
 CC=clang++
-CFLAGS=-c -Wall -std=c++0x
-LDFLAGS=
+CFLAGS=-c -Wall -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk -stdlib=libc++ -std=c++11
+LDFLAGS=-framework OpenGL -framework GLUT
+INCLUDE_FLAGS=-Iexternal/glm/
 BIN_DIR=bin
 OBJ_DIR=build
 SOURCE_DIR=src
-SOURCES=src/main.cpp
+SOURCES=src/main.cpp src/Framebuffer.cpp src/Context.cpp src/Pipeline.cpp src/DefaultRasteriser.cpp
 OBJECTS= $(addprefix $(OBJ_DIR)/, \
 		$(patsubst %.cpp, %.o,  \
 		$(patsubst %.c, %.o, $(SOURCES))))
 EXECUTABLE=software-rasterizer
+
+CFLAGS += ${INCLUDE_FLAGS}
 
 all: $(EXECUTABLE)
 

@@ -4,6 +4,198 @@
 		"selected_items":
 		[
 			[
+				"dy",
+				"dy01	float"
+			],
+			[
+				"dx",
+				"dx20	float"
+			],
+			[
+				"cy",
+				"cy20	float"
+			],
+			[
+				"cx",
+				"cx20	float"
+			],
+			[
+				"edg",
+				"edge20	float"
+			],
+			[
+				"set",
+				"set_pixel(size_t x, size_t y, const uint8_t *pixel)	void"
+			],
+			[
+				"fab",
+				"fabsf(float)	float"
+			],
+			[
+				"get_tri",
+				"get_triangle_varying0(TriangleData &vd)	VaryingData &"
+			],
+			[
+				"view",
+				"viewport() const	const Viewport &"
+			],
+			[
+				"dep",
+				"depth_buffer()	Framebuffer &"
+			],
+			[
+				"depth",
+				"depth_buffer()	Framebuffer &"
+			],
+			[
+				"uint",
+				"uint8_t	"
+			],
+			[
+				"Ve",
+				"Vec3	ShaderDataType"
+			],
+			[
+				"swi",
+				"swizzle(glm::comp X, glm::comp Y)	tref2<float>"
+			],
+			[
+				"Trian",
+				"TriangleArea(glm::vec3 &v0, glm::vec3 &v1, glm::vec3 &v2)	float"
+			],
+			[
+				"ve",
+				"vec3	"
+			],
+			[
+				"get_trian",
+				"get_triangle_vert0(TriangleData &vd)	glm::vec3 &"
+			],
+			[
+				"incl",
+				"include \"header\"	"
+			],
+			[
+				"Draw",
+				"DrawFlatBottomTriangle(Framebuffer &fb, glm::vec2 p0, glm::vec2 p1, glm::vec2 p2)	void"
+			],
+			[
+				"for",
+				"forv	Vector For Loop"
+			],
+			[
+				"se",
+				"set_pixel(size_t x, size_t y, const uint8_t *pixel)	void"
+			],
+			[
+				"const",
+				"constexpr	"
+			],
+			[
+				"printf",
+				"printf(const char *, ...)	int"
+			],
+			[
+				"side",
+				"sidesPoints	glm::vec2 [3][3]"
+			],
+			[
+				"includ",
+				"include <header>	"
+			],
+			[
+				"SID",
+				"SIDE_12	enum <anonymous>"
+			],
+			[
+				"SIDE",
+				"SIDE_01	enum <anonymous>"
+			],
+			[
+				"def",
+				"default:	"
+			],
+			[
+				"inc",
+				"include <header>	"
+			],
+			[
+				"dra",
+				"drawCall	DrawCall *"
+			],
+			[
+				"fram",
+				"framebuffer() const	const Framebuffer &"
+			],
+			[
+				"Vec",
+				"Vec4	ShaderDataType"
+			],
+			[
+				"vsh",
+				"vshoutput2	std::vector<ShaderVariable>"
+			],
+			[
+				"Shader",
+				"ShaderVariable	"
+			],
+			[
+				"longs",
+				"longsideDelta	float"
+			],
+			[
+				"lonsid",
+				"longsidePoints	glm::vec2 [2]"
+			],
+			[
+				"lons",
+				"longsidePoints	glm::vec2 [2]"
+			],
+			[
+				"long",
+				"longsidePoints	glm::vec2 [2]"
+			],
+			[
+				"lon",
+				"longsidePoints	glm::vec2 [2]"
+			],
+			[
+				"dele",
+				"delete expression	"
+			],
+			[
+				"Pipe",
+				"PipelineStageContext	"
+			],
+			[
+				"back",
+				"back() const	const_reference"
+			],
+			[
+				"float",
+				"float_t	"
+			],
+			[
+				"Pip",
+				"PipelineStageFunc	"
+			],
+			[
+				"read",
+				"read_fbo	GLuint"
+			],
+			[
+				"GL_READ",
+				"GL_READ_FRAMEBUFFER	"
+			],
+			[
+				"glBlitFramebuffer",
+				"glBlitFramebufferEXT(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter)	void"
+			],
+			[
+				"glFramebufferTexture2D",
+				"glFramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)	void"
+			],
+			[
 				"strcp",
 				"strcpy(char *, const char *)	char *"
 			],
@@ -84,16 +276,8 @@
 				"start"
 			],
 			[
-				"for",
-				"forv	Vector For Loop"
-			],
-			[
 				"meg",
 				"mergesort_internal"
-			],
-			[
-				"inc",
-				"include <header>	"
 			],
 			[
 				"cl",
@@ -112,42 +296,18 @@
 	"buffers":
 	[
 		{
-			"file": "project/Makefile",
-			"settings":
-			{
-				"buffer_size": 579,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "software-rasterizer.sublime-project",
-			"settings":
-			{
-				"buffer_size": 809,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/jhaberstro/Library/Application Support/Sublime Text 2/Packages/SublimeClang/SublimeClang.sublime-settings",
-			"settings":
-			{
-				"buffer_size": 9253,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/jhaberstro/Library/Application Support/Sublime Text 2/Packages/SublimeClang/Default.sublime-keymap",
-			"settings":
-			{
-				"buffer_size": 1517,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "project/src/main.cpp",
 			"settings":
 			{
-				"buffer_size": 96,
+				"buffer_size": 3937,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "project/src/DefaultRasteriser.cpp",
+			"settings":
+			{
+				"buffer_size": 4454,
 				"line_ending": "Unix"
 			}
 		}
@@ -155,16 +315,32 @@
 	"build_system": "Packages/Makefile/Make.sublime-build",
 	"command_palette":
 	{
-		"height": 327.0,
+		"height": 392.0,
 		"selected_items":
 		[
 			[
-				"Package",
-				"Package Control: Install Package"
-			],
-			[
 				":w",
 				":w - Save"
+			],
+			[
+				":",
+				":w - Save"
+			],
+			[
+				"git s",
+				"Git: Status"
+			],
+			[
+				"git ad",
+				"Git: Custom Command"
+			],
+			[
+				"git sta",
+				"Git: Status"
+			],
+			[
+				"Package",
+				"Package Control: Install Package"
 			],
 			[
 				"Package Up",
@@ -244,8 +420,26 @@
 	},
 	"file_history":
 	[
-		"/Users/jhaberstro/Library/Application Support/Sublime Text 2/Packages/User/SublimeClang.sublime-settings",
 		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/main.cpp",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/resources.txt",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/software-rasterizer.sublime-project",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Context.cpp",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Context.hpp",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Pipeline.hpp",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Pipeline.cpp",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/DefaultRasteriser.cpp",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Framebuffer.cpp",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Framebuffer.hpp",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/Makefile",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/DefaultRasteriser.hpp",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/DefaultRasteriser",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/DefaultRasterizer.hpp",
+		"/Users/jhaberstro/Library/Application Support/Sublime Text 2/Packages/SublimeClang/SublimeClang.sublime-settings",
+		"/Users/jhaberstro/Library/Application Support/Sublime Text 2/Packages/SublimeClang/Default.sublime-keymap",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/main.h",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/test.h",
+		"/Users/jhaberstro/Library/Application Support/Sublime Text 2/Packages/User/SublimeClang.sublime-settings",
 		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/main.c",
 		"/Users/jhaberstro/Documents/School/Transfer Application/UMass NetID",
 		"/Users/jhaberstro/Personal-Projects/interview-practice/str_reverse.c",
@@ -262,7 +456,6 @@
 		"/Users/jhaberstro/Personal-Projects/gameboy-emulator/gameboy-emulator.sublime-project",
 		"/Users/jhaberstro/Personal-Projects/gameboy-emulator/Makefile",
 		"/Users/jhaberstro/Personal-Projects/jaml/jaml-parser/jaml-parser/JHJAMLParser.h",
-		"/Users/jhaberstro/Library/Application Support/Sublime Text 2/Packages/SublimeClang/SublimeClang.sublime-settings",
 		"/Users/jhaberstro/Personal-Projects/jaml/jaml-parser/jaml-parser/JHJAMLParser.m",
 		"/Users/jhaberstro/Personal-Projects/gameboy-emulator/src/cpu.h",
 		"/Users/jhaberstro/Personal-Projects/gameboy-emulator/src/cpu.c",
@@ -294,9 +487,31 @@
 	},
 	"find_state":
 	{
-		"case_sensitive": false,
+		"case_sensitive": true,
 		"find_history":
 		[
+			"x1",
+			"x3",
+			"x2",
+			"y3",
+			"r1",
+			"y2",
+			"r3",
+			"r2",
+			"y1",
+			";",
+			"len12",
+			"len01",
+			"len02",
+			"clip",
+			"Context",
+			"Uniform",
+			"ContextType",
+			"Pipeline< TContext >::",
+			"template< typename TContext >",
+			"ContextType",
+			"num_pipelin",
+			"glClearColor",
 			"	        \"",
 			"range",
 			"ms",
@@ -315,6 +530,25 @@
 		"regex": false,
 		"replace_history":
 		[
+			"v0.x",
+			"v2.x",
+			"v1.x",
+			"v2.y",
+			"v0.z",
+			"v1.y",
+			"v2.z",
+			"v1.z",
+			"v0.y",
+			"lengths[SIDE_12]",
+			"lengths[SIDE_01]",
+			"lengths[SIDE_02]",
+			"StateContext",
+			"ShaderVariable",
+			"ShaderVariable*",
+			"Context*",
+			"Pipeline< TStateContext, TStageContext >::",
+			"template< typename TStateContext, typename TStageContext >",
+			"StateContextType"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -325,140 +559,60 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "project/Makefile",
+					"file": "project/src/main.cpp",
 					"settings":
 					{
-						"buffer_size": 579,
+						"buffer_size": 3937,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								309,
-								309
+								2193,
+								2193
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Makefile/Makefile.tmLanguage"
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 798.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "software-rasterizer.sublime-project",
+					"file": "project/src/DefaultRasteriser.cpp",
 					"settings":
 					{
-						"buffer_size": 809,
+						"buffer_size": 4454,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								795,
-								795
+								4220,
+								4220
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"syntax": "Packages/C++/C++.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/Users/jhaberstro/Library/Application Support/Sublime Text 2/Packages/SublimeClang/SublimeClang.sublime-settings",
-					"settings":
-					{
-						"buffer_size": 9253,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7664,
-								7597
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JSON.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2630.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/Users/jhaberstro/Library/Application Support/Sublime Text 2/Packages/SublimeClang/Default.sublime-keymap",
-					"settings":
-					{
-						"buffer_size": 1517,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								287,
-								300
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JSON.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 234.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "project/src/main.cpp",
-					"settings":
-					{
-						"buffer_size": 96,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								96,
-								96
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1014.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -501,13 +655,9 @@
 	{
 		"height": 100.0
 	},
-	"output.clang_static_analyzer":
-	{
-		"height": 0.0
-	},
 	"replace":
 	{
-		"height": 0.0
+		"height": 64.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -516,16 +666,100 @@
 		"selected_items":
 		[
 			[
+				"def",
+				"src/DefaultRasteriser.cpp"
+			],
+			[
+				"mai",
+				"src/main.cpp"
+			],
+			[
 				"main",
 				"src/main.cpp"
+			],
+			[
+				"frame",
+				"src/Framebuffer.hpp"
+			],
+			[
+				"res",
+				"resources.txt"
+			],
+			[
+				"pi",
+				"src/Pipeline.cpp"
+			],
+			[
+				"resou",
+				"resources.txt"
+			],
+			[
+				"con",
+				"src/Context.hpp"
+			],
+			[
+				"cont",
+				"src/Context.hpp"
+			],
+			[
+				"c",
+				"src/Context.hpp"
+			],
+			[
+				"mak",
+				"Makefile"
+			],
+			[
+				"make",
+				"Makefile"
+			],
+			[
+				"default",
+				"src/DefaultRasteriser.cpp"
+			],
+			[
+				"defau",
+				"src/DefaultRasteriser.cpp"
+			],
+			[
+				"pip",
+				"src/Pipeline.hpp"
+			],
+			[
+				"context",
+				"src/Context.hpp"
+			],
+			[
+				"context.h",
+				"src/Context.hpp"
+			],
+			[
+				"rame",
+				"src/Framebuffer.hpp"
+			],
+			[
+				"fracpp",
+				"src/Framebuffer.cpp"
+			],
+			[
+				"main.cp",
+				"src/main.cpp"
+			],
+			[
+				"fram",
+				"src/Framebuffer.hpp"
+			],
+			[
+				"frhpp",
+				"src/Framebuffer.hpp"
 			],
 			[
 				"ma",
 				"Makefile"
 			],
 			[
-				"mak",
-				"Makefile"
+				"test",
+				"src/test.h"
 			],
 			[
 				"memor",
@@ -546,10 +780,10 @@
 		],
 		"width": 380.0
 	},
-	"show_minimap": true,
+	"show_minimap": false,
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 99.0,
+	"side_bar_width": 193.0,
 	"status_bar_visible": true
 }

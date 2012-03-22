@@ -1,0 +1,29 @@
+Triangle rasterisation interpolation: http://www.acunliffe.com/index.php/2011/10/triangle-rasterisation/#more-116
+
+High Speed Software Rendering by Paul Nettle: http://www.flipcode.com/archives/High_Speed_Software_Rendering.shtml
+
+OpenGL transformation: http://www.songho.ca/opengl/gl_transform.html
+
+Direct3D Transformation Pipeline: http://msdn.microsoft.com/en-us/library/ee418867%28VS.85%29.aspx
+
+Chris Hecker's perspective texture mapping articles: http://chrishecker.com/Miscellaneous_Technical_Articles#Perspective_Texture_Mapping
+
+Nick Capen's Advanced Rasterization: http://devmaster.net/forums/topic/1145-advanced-rasterization/
+
+Triangle Scan Conversion using 2D Homogeneous Coordinates: http://www.cs.unc.edu/~olano/papers/2dh-tri/
+
+Zach Bethel's A Modern Approach to Software Rasterization: http://cse.taylor.edu/~zbethel/MSR/ModernApproachToSR.pdf
+
+Polygon clipping in homogenoues coordinates sample code: http://wwwx.cs.unc.edu/~sud/courses/236/a5/softgl_homoclip_smooth.cpp
+
+Blinn's original paper "Clipping using Homogenous Coordinates": http://fabiensanglard.net/polygon_codec/clippingdocument/p245-blinn.pdf
+
+Clipping notes: http://fabiensanglard.net/polygon_codec/clippingdocument/Clipping.pdf
+
+Collection of papers on clipping and homogenous coordinates: http://www.ece.uvic.ca/~bctill/20007/additional/
+
+Linear interpolation of varying variables in rasterization: http://en.wikibooks.org/wiki/GLSL_Programming/Rasterization#Linear_Interpolation_of_Varying_Variables
+
+Software Renderer Accelerated by CUDA: http://maxest.gct-game.net/vainmoinen/bachelor_thesis.pdf
+
+The Bresenham Line-Drawing Algorithm: http://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html
