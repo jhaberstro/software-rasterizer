@@ -10,30 +10,30 @@ class Pipeline
 {
 public:
 
-	Pipeline(Renderer& ctx);
+	Pipeline(Renderer& renderer);
 
-	Renderer const* context() const;
+	Renderer const* renderer() const;
 
-	Renderer* context();
+	Renderer* renderer();
 
 	void execute(RasteriserFunc rasterf);
 
 private:
 
-	Renderer* _context;
+	Renderer* _renderer;
 };
 
 
-inline Pipeline::Pipeline(Renderer& ctx)
-: _context(&ctx) {
+inline Pipeline::Pipeline(Renderer& renderer)
+: _renderer(&renderer) {
 }
 
-inline Renderer const* Pipeline::context() const {
-	return _context;
+inline Renderer const* Pipeline::renderer() const {
+	return _renderer;
 }
 
-inline Renderer* Pipeline::context() {
-	return _context;
+inline Renderer* Pipeline::renderer() {
+	return _renderer;
 }
 
 #endif // JHSR_PIPELINE_HPP
