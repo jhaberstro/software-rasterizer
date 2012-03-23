@@ -16,11 +16,11 @@ struct Viewport
 
 enum ShaderDataType : unsigned int
 {
-	Float,
-	Vec3,
-	Vec4,
-	Mat3x3,
-	Mat4x4
+	Float  = 0,
+	Vec3   = 1,
+	Vec4   = 2,
+	Mat3x3 = 3,
+	Mat4x4 = 4
 };
 
 struct VertexArray
@@ -47,6 +47,19 @@ struct ShaderVariable
 	ShaderVariable(glm::mat4x4 const& m4) : m4(m4), type(Mat4x4) {}
 	ShaderVariable(ShaderVariable&& sv) : m4(std::move(sv.m4)), type(std::move(sv.type)) {}
 
+	ShaderVariable& operator+=(ShaderVariable const& other) {
+		assert(type == other.type);
+		static int sizes[] = {1, 3, 4, 9, 16};
+		int size = sizes[type];
+		float* pf = &f;
+		float const* pfother = &other.f;
+		for (int i = 0; i < size; ++i) {
+			pf[i] += pfother[i];
+		}
+
+		return *this;
+	}
+
 	union {
 		float f;
 		glm::vec3 v3;
@@ -61,7 +74,7 @@ struct ShaderVariable
 using VaryingData = std::vector< ShaderVariable >;
 // first element of returned vector of VertShaderFunc must be the output position
 using VertShaderFunc = VaryingData (*) (size_t vindex, std::vector< VertexArray >& attributes, std::vector< ShaderVariable >& uniforms);
-using FragShaderFunc = glm::vec4 (*) (std::vector< ShaderVariable >& varyings, std::vector< ShaderVariable >& uniforms);
+using FragShaderFunc = glm::vec4 (*) (ShaderVariable* varyings, std::vector< ShaderVariable >& uniforms);
 
 // The thought is that since author of the shader is responsible
 // for determining how uniform data is layed out, providing a

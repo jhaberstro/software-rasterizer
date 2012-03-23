@@ -64,10 +64,10 @@ void default_rasteriser(StateContext& ctx, Shader& fsh, TriangleData& triangle) 
 	glm::vec3& p0 = get_triangle_vert0(triangle);
 	glm::vec3& p1 = get_triangle_vert1(triangle);
 	glm::vec3& p2 = get_triangle_vert2(triangle);
-    float minx = std::min(std::min(p0.x, p1.x), p2.x);
-    float miny = std::min(std::min(p0.y, p1.y), p2.y);
-    float maxx = std::max(std::max(p0.x, p1.x), p2.x);
-    float maxy = std::max(std::max(p0.y, p1.y), p2.y);
+    float minx = std::max(0.0f, std::min(std::min(p0.x, p1.x), p2.x));
+    float miny = std::max(0.0f, std::min(std::min(p0.y, p1.y), p2.y));
+    float maxx = std::min(float(ctx.framebuffer().width() - 1),  std::max(std::max(p0.x, p1.x), p2.x));
+    float maxy = std::min(float(ctx.framebuffer().height() - 1), std::max(std::max(p0.y, p1.y), p2.y));
 
     // All derived from:
     //  float edge01 = (dx01 * (y - p0.y)) - (dy01 * (x - p0.x));
@@ -93,17 +93,54 @@ void default_rasteriser(StateContext& ctx, Shader& fsh, TriangleData& triangle) 
     float dzdy = -triNormal[1] / triNormal[2];
     float cz = p0.z + (dzdx * (minx - p0.x)) + (dzdy * (miny - p0.y));
 
+    std::vector< ShaderVariable >& varying0 = get_triangle_varying0(triangle);
+    std::vector< ShaderVariable >& varying1 = get_triangle_varying1(triangle);
+    std::vector< ShaderVariable >& varying2 = get_triangle_varying2(triangle);
+    std::vector< ShaderVariable > interpolatedVaryings;
+    std::vector< ShaderVariable > xgradients;
+    std::vector< ShaderVariable > ygradients;
+    interpolatedVaryings.reserve(varying0.size() - 1);
+    xgradients.reserve(varying0.size() - 1);
+    ygradients.reserve(varying0.size() - 1);
+    for (int i = 1; i < varying0.size(); ++i) {
+        ShaderVariable& sv0 = varying0[i];
+        ShaderVariable& sv1 = varying1[i];
+        ShaderVariable& sv2 = varying2[i];
+        switch(sv0.type) {
+            case Vec4: {
+                glm::vec4 A    = (sv2.v4 - sv0.v4) * (p1.y - p0.y) - (sv1.v4 - sv0.v4) * (p2.y - p0.y);                
+                glm::vec4 B    = (p2.x - p0.x) * (sv1.v4 - sv0.v4) - (p1.x - p0.x) * (sv2.v4 - sv0.v4);
+                float invC     = 1.0f / ((p1.x - p0.x) * (p2.y - p0.y) - (p2.x - p0.x) * (p1.y - p0.y)); 
+                glm::vec4 dvdx = -A * invC;
+                glm::vec4 dvdy = -B * invC;
+                glm::vec4 cv   = sv0.v4 + (dvdx * (minx - p0.x)) + (dvdy * (miny - p0.y));
+                interpolatedVaryings.push_back(cv);
+                xgradients.push_back(dvdx);
+                ygradients.push_back(dvdy);
+                break;
+            }
+
+            default: {
+                assert(false);
+                break;
+            }
+        }
+    }
+
     // Correct for fill convention
     if (dy01 < 0 || (dy01 == 0.0f && dx01 > 0)) c01 += 1;
     if (dy12 < 0 || (dy12 == 0.0f && dx12 > 0)) c12 += 1;
     if (dy20 < 0 || (dy20 == 0.0f && dx20 > 0)) c20 += 1;
 
-    uint32_t color = 0xff0000ff;
+    size_t bufferSize = interpolatedVaryings.size() * sizeof(ShaderVariable);
+    uint8_t varyingsBuffer[bufferSize];
+    ShaderVariable* varyings = reinterpret_cast< ShaderVariable* >(&varyingsBuffer[0]);
     for (float y = miny; y < maxy; y += 1.0f) {
         float cx01 = cy01;
         float cx12 = cy12;
         float cx20 = cy20;
         float z    = cz;
+        std::memcpy(varyings, &interpolatedVaryings[0], bufferSize);
         for (float x = minx; x < maxx; x += 1.0f) {
             if (cx01 >= 0.0f && cx12 >= 0.0f && cx20 >= 0.0f) {
                 float currentDepth;
@@ -112,19 +149,28 @@ void default_rasteriser(StateContext& ctx, Shader& fsh, TriangleData& triangle) 
                     continue;
                 }
 
+                glm::vec4 color = fsh.ffunc(varyings, fsh.uniforms);
+                color *= glm::vec4(255.0f);
+                uint32_t pixel = (static_cast< uint32_t >(color[3]) << 24) | (static_cast< uint32_t >(color[2]) << 16) | (static_cast< uint32_t >(color[1]) << 8) | static_cast< uint32_t >(color[0]);  
                 ctx.depth_buffer().set_pixel(x, y, reinterpret_cast< uint8_t* >(&z));
-                ctx.framebuffer().set_pixel(x, y, reinterpret_cast< uint8_t* >(&color));
+                ctx.framebuffer().set_pixel(x, y, reinterpret_cast< uint8_t* >(&pixel));
             }
 
             cx01 -= dy01;
             cx12 -= dy12;
             cx20 -= dy20;
             z    += dzdx;
+            for (int i = 0; i < interpolatedVaryings.size(); ++i) {
+                varyings[i] += xgradients[i];
+            }
         }
 
         cy01 += dx01;
         cy12 += dx12;
         cy20 += dx20;
         cz   += dzdy;
+        for (int i = 0; i < interpolatedVaryings.size(); ++i) {
+            interpolatedVaryings[i] += ygradients[i];
+        }
     }
 }
