@@ -4,18 +4,14 @@
 #include <cmath>
 #include <glm/gtc/swizzle.hpp>
 
-void default_rasteriser(StateContext& ctx, Shader const& fsh, TriangleData& triangle) {
+void default_rasteriser(Renderer& renderer, Shader const& fsh, TriangleData& triangle) {
 	glm::vec3& p0 = get_triangle_vert0(triangle);
 	glm::vec3& p1 = get_triangle_vert1(triangle);
 	glm::vec3& p2 = get_triangle_vert2(triangle);
     float minx = std::max(0.0f, std::min(std::min(p0.x, p1.x), p2.x));
     float miny = std::max(0.0f, std::min(std::min(p0.y, p1.y), p2.y));
-    float maxx = std::min(float(ctx.framebuffer().width() - 1),  std::max(std::max(p0.x, p1.x), p2.x));
-    float maxy = std::min(float(ctx.framebuffer().height() - 1), std::max(std::max(p0.y, p1.y), p2.y));
-
-    printf("p0: (%f, %f, %f)\n", p0[0], p0[1], p0[2]);
-    printf("p1: (%f, %f, %f)\n", p1[0], p1[1], p1[2]);
-    printf("p2: (%f, %f, %f)\n\n", p2[0], p2[1], p2[2]);
+    float maxx = std::min(float(renderer.framebuffer().width() - 1),  std::max(std::max(p0.x, p1.x), p2.x));
+    float maxy = std::min(float(renderer.framebuffer().height() - 1), std::max(std::max(p0.y, p1.y), p2.y));
 
     // All derived from:
     //  float edge01 = (dx01 * (y - p0.y)) - (dy01 * (x - p0.x));
@@ -41,12 +37,12 @@ void default_rasteriser(StateContext& ctx, Shader const& fsh, TriangleData& tria
     float dzdy = -triNormal[1] / triNormal[2];
     float cz = p0.z + (dzdx * (minx - p0.x)) + (dzdy * (miny - p0.y));
 
-    std::vector< ShaderVariable >& varying0 = get_triangle_varying0(triangle);
-    std::vector< ShaderVariable >& varying1 = get_triangle_varying1(triangle);
-    std::vector< ShaderVariable >& varying2 = get_triangle_varying2(triangle);
-    std::vector< ShaderVariable > interpolatedVaryings;
-    std::vector< ShaderVariable > xgradients;
-    std::vector< ShaderVariable > ygradients;
+    auto& varying0 = get_triangle_varying0(triangle);
+    auto& varying1 = get_triangle_varying1(triangle);
+    auto& varying2 = get_triangle_varying2(triangle);
+    VaryingData interpolatedVaryings;
+    VaryingData xgradients;
+    VaryingData ygradients;
     interpolatedVaryings.reserve(varying0.size() - 1);
     xgradients.reserve(varying0.size() - 1);
     ygradients.reserve(varying0.size() - 1);
@@ -92,13 +88,13 @@ void default_rasteriser(StateContext& ctx, Shader const& fsh, TriangleData& tria
         for (float x = minx; x < maxx; x += 1.0f) {
             if (cx01 >= 0.0f && cx12 >= 0.0f && cx20 >= 0.0f) {
                 float currentDepth;
-                ctx.depth_buffer().get_pixel(x, y, &currentDepth);
+                renderer.depth_buffer().get_pixel(x, y, &currentDepth);
                 if (z <= currentDepth) {
                     glm::vec4 color = fsh.ffunc(varyings, fsh.uniforms);
                     color *= glm::vec4(255.0f);
                     uint32_t pixel = (static_cast< uint32_t >(color[3]) << 24) | (static_cast< uint32_t >(color[2]) << 16) | (static_cast< uint32_t >(color[1]) << 8) | static_cast< uint32_t >(color[0]);  
-                    ctx.depth_buffer().set_pixel(x, y, &z);
-                    ctx.framebuffer().set_pixel(x, y, &pixel);
+                    renderer.depth_buffer().set_pixel(x, y, &z);
+                    renderer.framebuffer().set_pixel(x, y, &pixel);
                 }
             }
 

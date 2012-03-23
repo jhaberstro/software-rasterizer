@@ -5,11 +5,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <cmath>
 #include <tuple>
-#include "Context.hpp"
+#include "Renderer.hpp"
 #include "Pipeline.hpp"
 #include "DefaultRasteriser.hpp"
 
-StateContext context;
+Renderer renderer;
 GLuint read_fbo;
 GLuint framebuffer_tex;
 
@@ -37,14 +37,14 @@ glm::vec4 fsh_func(ShaderVariable* varyings, std::vector< ShaderVariable > const
 }
 
 void init(void) {
-    Pipeline pipeline(context);
+    Pipeline pipeline(renderer);
     float depthClear = 100.0f;
-    context.set_framebuffer(WIDTH, HEIGHT, 4);
-    context.set_viewport(0, 0, WIDTH, HEIGHT);
-    context.set_depth_range(0.0f, 1.0f);
-    context.depth_buffer().clear(&depthClear);
+    renderer.set_framebuffer(WIDTH, HEIGHT, 4);
+    renderer.set_viewport(0, 0, WIDTH, HEIGHT);
+    renderer.set_depth_range(0.0f, 1.0f);
+    renderer.depth_buffer().clear(&depthClear);
 
-    Framebuffer& framebuffer = context.framebuffer();
+    Framebuffer& framebuffer = renderer.framebuffer();
     ShaderVariable modelview = glm::translate(glm::mat4x4(), glm::vec3(-1.0f, 0.0f, 0.0f));
     ShaderVariable projection = glm::perspective(60.0f, static_cast< float >(WIDTH) / static_cast< float >(HEIGHT), 0.1f, 100.0f); // glm::ortho(0.0f, static_cast< float >(WIDTH), 0.0f, static_cast< float >(HEIGHT));
 
@@ -55,7 +55,6 @@ void init(void) {
     fsh.ffunc = fsh_func;
 
     glm::vec3 positions[] = {
-        //glm::vec3(100, 100, 0.0f), glm::vec3(150, 110, 0.0f), glm::vec3(130, 150, 0.0f)
         glm::vec3(-1.0f, -1.0f, -3.0f), glm::vec3(1.0f, -1.0f, -3.0f), glm::vec3(0.0f, 1.0f, -3.0f)
     };
     glm::vec4 colors[] = {
@@ -67,15 +66,13 @@ void init(void) {
     attributes.push_back(pa);
     attributes.push_back(ca);
 
-    context.set_vertex_shader(vsh);
-    context.set_fragment_shader(fsh);
-    context.draw(attributes, 0, 3);
+    renderer.set_vertex_shader(vsh);
+    renderer.set_fragment_shader(fsh);
+    renderer.draw(attributes, 0, 3);
     pipeline.execute(default_rasteriser);
 
-    for (auto& p : positions) {
-        p += glm::vec3(1.7f, 0.0, -0.01f);
-    }
-    context.draw(attributes, 0, 3);
+    vsh.uniforms[0] = glm::translate(vsh.uniforms[0].m4, glm::vec3(1.7f, 0.0f, -0.01f));
+    renderer.draw(attributes, 0, 3);
     pipeline.execute(default_rasteriser);
 
 
@@ -84,7 +81,7 @@ void init(void) {
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, framebuffer.width(), framebuffer.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, framebuffer.pixels());
-    //glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, framebuffer.width(), framebuffer.height(), 0, GL_RED, GL_FLOAT, context.depth_buffer().pixels());
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, framebuffer.width(), framebuffer.height(), 0, GL_RED, GL_FLOAT, renderer.depth_buffer().pixels());
 
 	glGenFramebuffers(1, &read_fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, read_fbo);
@@ -93,7 +90,7 @@ void init(void) {
 }
 
 void display(void) {
-    Framebuffer& framebuffer = context.framebuffer();
+    Framebuffer& framebuffer = renderer.framebuffer();
     
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClearColor(0, 0, 0, 0);

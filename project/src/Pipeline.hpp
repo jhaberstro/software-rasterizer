@@ -1,37 +1,38 @@
 #ifndef JHSR_PIPELINE_HPP
 #define JHSR_PIPELINE_HPP
 
-#include "Context.hpp"
+#include "Renderer.hpp"
+#include "DefaultRasteriser.hpp"
 #include <cstring>
 
-struct StateContext;
+struct Renderer;
 class Pipeline
 {
 public:
 
-	Pipeline(StateContext& ctx);
+	Pipeline(Renderer& ctx);
 
-	StateContext const* context() const;
+	Renderer const* context() const;
 
-	StateContext* context();
+	Renderer* context();
 
 	void execute(RasteriserFunc rasterf);
 
 private:
 
-	StateContext* _context;
+	Renderer* _context;
 };
 
 
-inline Pipeline::Pipeline(StateContext& ctx)
+inline Pipeline::Pipeline(Renderer& ctx)
 : _context(&ctx) {
 }
 
-inline StateContext const* Pipeline::context() const {
+inline Renderer const* Pipeline::context() const {
 	return _context;
 }
 
-inline StateContext* Pipeline::context() {
+inline Renderer* Pipeline::context() {
 	return _context;
 }
 

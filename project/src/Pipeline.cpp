@@ -2,7 +2,7 @@
 #include <tuple>
 #include <cstdio>
 
-inline void process_vert(StateContext& ctx, glm::vec3& processedVert, VaryingData& vshOutput) {
+inline void process_vert(Renderer& ctx, glm::vec3& processedVert, VaryingData& vshOutput) {
 	assert(vshOutput[0].type == Vec4);
 	glm::vec4& vert = vshOutput[0].v4;
 
@@ -22,7 +22,7 @@ inline void process_vert(StateContext& ctx, glm::vec3& processedVert, VaryingDat
 
 void Pipeline::execute(RasteriserFunc rasterf) {
 	while (_context->drawCalls.empty() == false) {
-		DrawCall* drawCall = _context->drawCalls.front();
+		auto drawCall = _context->drawCalls.front();
 		_context->drawCalls.pop();
 
 		// Assuming straight up triangles, not triangle lists or quads or lines or whatever
