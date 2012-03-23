@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <cstring>
 #include <cassert>
+#include <cstdio>
 
 class Framebuffer
 {
@@ -18,6 +19,8 @@ public:
 	size_t height() const;
 
 	size_t bytes_per_pixel() const;
+
+	void clear(uint8_t const* value);
 
 	void set_pixel(size_t x, size_t y, uint8_t const* pixel);
 
@@ -58,15 +61,28 @@ inline size_t Framebuffer::bytes_per_pixel() const {
 	return _bytesPerPixel;
 }
 
+inline void Framebuffer::clear(const uint8_t *value) {
+	for (size_t y = 0; y < _height; ++y) {
+		for (size_t x = 0; x < _width; ++x) {
+			this->set_pixel(x, y, value);
+		}
+	}
+}
+
 inline void Framebuffer::set_pixel(size_t x, size_t y, uint8_t const* pixel) {
+	assert(x >= 0 && x < _width);
+	assert(y >= 0 && y < _height);
 	std::memcpy(_pixels + (y * _width * _bytesPerPixel) + (x * _bytesPerPixel), pixel, _bytesPerPixel);
 }
 
 inline void Framebuffer::set_row(size_t row, uint8_t const* rowPixels) {
+	assert(row >= 0 && row < _height);
 	std::memcpy(_pixels + (row * _width * _bytesPerPixel), rowPixels, _width * _bytesPerPixel);
 }
 
 inline void Framebuffer::get_pixel(size_t x, size_t y, uint8_t *result) const {
+	assert(x >= 0 && x < _width);
+	assert(y >= 0 && y < _height);
 	std::memcpy(result, _pixels + (y * _width * _bytesPerPixel) + (x * _bytesPerPixel), _bytesPerPixel);
 }
 

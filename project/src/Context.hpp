@@ -32,7 +32,7 @@ struct VertexArray
 
 	size_t components;
 	size_t stride;
-	float* vertices;
+	void* vertices;
 };
 
 struct ShaderVariable
@@ -68,6 +68,8 @@ using FragShaderFunc = glm::vec4 (*) (std::vector< ShaderVariable >& varyings, s
 // straight list of shader variables is reasonable.
 struct Shader
 {
+
+
 	std::vector< ShaderVariable > uniforms;
 	union {
 		VertShaderFunc vfunc;

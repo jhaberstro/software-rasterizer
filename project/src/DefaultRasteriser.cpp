@@ -62,8 +62,8 @@
 
 void default_rasteriser(StateContext& ctx, Shader& fsh, TriangleData& triangle) {
 	glm::vec3& p0 = get_triangle_vert0(triangle);
-	glm::vec3& p1 = get_triangle_vert0(triangle);
-	glm::vec3& p2 = get_triangle_vert0(triangle);
+	glm::vec3& p1 = get_triangle_vert1(triangle);
+	glm::vec3& p2 = get_triangle_vert2(triangle);
     float minx = std::min(std::min(p0.x, p1.x), p2.x);
     float miny = std::min(std::min(p0.y, p1.y), p2.y);
     float maxx = std::max(std::max(p0.x, p1.x), p2.x);

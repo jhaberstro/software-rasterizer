@@ -6,6 +6,8 @@
 #include <cmath>
 #include <tuple>
 #include "Context.hpp"
+#include "Pipeline.hpp"
+#include "DefaultRasteriser.hpp"
 
 StateContext context;
 GLuint read_fbo;
@@ -17,63 +19,13 @@ enum : size_t
 	HEIGHT = 480
 };
 
-// Assumes counter clock-wise
-// void DrawGeneralTriangle(Framebuffer& fb, glm::vec2 p0, glm::vec2 p1, glm::vec2 p2) {
-//     float minx = std::min(std::min(p0.x, p1.x), p2.x);
-//     float miny = std::min(std::min(p0.y, p1.y), p2.y);
-//     float maxx = std::max(std::max(p0.x, p1.x), p2.x);
-//     float maxy = std::max(std::max(p0.y, p1.y), p2.y);
-
-//     // All derived from:
-//     //  float edge01 = (dx01 * (y - p0.y)) - (dy01 * (x - p0.x));
-//     //  float edge12 = (dx12 * (y - p1.y)) - (dy12 * (x - p1.x));
-//     //  float edge20 = (dx20 * (y - p2.y)) - (dy20 * (x - p2.x));
-//     float dx01 = (p1.x - p0.x);
-//     float dx12 = (p2.x - p1.x);
-//     float dx20 = (p0.x - p2.x);
-//     float dy01 = (p1.y - p0.y);
-//     float dy12 = (p2.y - p1.y);
-//     float dy20 = (p0.y - p2.y);
-//     float c01 = (dx01 * -p0.y) + (dy01 * p0.x);
-//     float c12 = (dx12 * -p1.y) + (dy12 * p1.x);
-//     float c20 = (dx20 * -p2.y) + (dy20 * p2.x);
-//     float cy01 = (dx01 * miny) + (dy01 * -minx) + c01;
-//     float cy12 = (dx12 * miny) + (dy12 * -minx) + c12;
-//     float cy20 = (dx20 * miny) + (dy20 * -minx) + c20;
-
-//     // Correct for fill convention
-//     if (dy01 < 0 || (dy01 == 0.0f && dx01 > 0)) c01 += 1;
-//     if (dy12 < 0 || (dy12 == 0.0f && dx12 > 0)) c12 += 1;
-//     if (dy20 < 0 || (dy20 == 0.0f && dx20 > 0)) c20 += 1;
-
-//     uint32_t color = 0xff0000ff;
-//     for (float y = miny; y < maxy; y += 1.0f) {
-//         float cx01 = cy01;
-//         float cx12 = cy12;
-//         float cx20 = cy20;
-//         for (float x = minx; x < maxx; x += 1.0f) {
-//             if (cx01 >= 0.0f && cx12 >= 0.0f && cx20 >= 0.0f) {
-//                 fb.set_pixel(x, y, reinterpret_cast< uint8_t* >(&color));
-//             }
-
-//             cx01 -= dy01;
-//             cx12 -= dy12;
-//             cx20 -= dy20;
-//         }
-
-//         cy01 += dx01;
-//         cy12 += dx12;
-//         cy20 += dx20;
-//     }
-// }
-
 VaryingData vsh_func(size_t vindex, std::vector< VertexArray >& attributes, std::vector< ShaderVariable >& uniforms) {
     VertexArray& va = attributes[0];
     glm::vec3 position = reinterpret_cast< glm::vec3* >(va.vertices)[vindex];
     glm::mat4x4& modelview = uniforms[0].m4;
     glm::mat4x4& projection = uniforms[1].m4;
     VaryingData output;
-    output.push_back(ShaderVariable(modelview * projection * glm::vec4(position.x, position.y, position.z, 1.0f)));
+    output.push_back(ShaderVariable(projection * modelview * glm::vec4(position.x, position.y, position.z, 1.0f)));
     return output;
 }
 
@@ -82,13 +34,15 @@ glm::vec4 fsh_func(std::vector< ShaderVariable >& varyings, std::vector< ShaderV
 }
 
 void init(void) {
+    float depthClear = 100.0f;
     context.set_framebuffer(WIDTH, HEIGHT, 4);
     context.set_viewport(0, 0, WIDTH, HEIGHT);
     context.set_depth_range(0.0f, 1.0f);
+    context.depth_buffer().clear(reinterpret_cast< uint8_t* >(&depthClear));
 
     Framebuffer& framebuffer = context.framebuffer();
     ShaderVariable modelview = ShaderVariable(glm::mat4x4());
-    ShaderVariable projection(glm::perspective(60.0f, static_cast< float >(WIDTH) / static_cast< float >(HEIGHT), 0.1f, 100.0f));
+    ShaderVariable projection = glm::perspective(60.0f, static_cast< float >(WIDTH) / static_cast< float >(HEIGHT), 0.1f, 100.0f); // glm::ortho(0.0f, static_cast< float >(WIDTH), 0.0f, static_cast< float >(HEIGHT));
 
     Shader vsh, fsh;
     vsh.uniforms.push_back(modelview);
@@ -96,8 +50,23 @@ void init(void) {
     vsh.vfunc = vsh_func;
     fsh.ffunc = fsh_func;
 
-	//DrawGeneralTriangle(*framebuffer, glm::vec2(100, 100), glm::vec2(150, 110), glm::vec2(130, 150));	
+    glm::vec3 triangle[] = {
+        //glm::vec3(100, 100, 0.0f), glm::vec3(150, 110, 0.0f), glm::vec3(130, 150, 0.0f)
+        glm::vec3(-1.0f, -1.0f, -3.0f), glm::vec3(1.0f, -1.0f, -3.0f), glm::vec3(0.0f, 1.0f, -3.0f)
+    };
+    VertexArray va;
+    va.stride = 0;
+    va.components = 3;
+    va.vertices = triangle;
+    std::vector< VertexArray > attributes;
+    attributes.push_back(va);
 
+    context.set_vertex_shader(vsh);
+    context.set_fragment_shader(fsh);
+    context.draw(attributes, 0, 3);
+
+    Pipeline pipeline(context);
+    pipeline.execute(default_rasteriser);
 
 	glGenTextures(1, &framebuffer_tex);
 	glBindTexture(GL_TEXTURE_2D, framebuffer_tex);
@@ -141,12 +110,6 @@ int main(int argc, char** argv) {
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutIdleFunc(idle);
-
-    glm::vec2 p0(0.0, 10.0);
-    glm::vec2 p1(0.0, 20.0);
-    glm::vec2 p3(5.0, 15.0);
-    glm::vec2 proj = glm::proj(p3, glm::normalize(p1 - p0));
-    printf("projection: (%f, %f)\n", proj[0], proj[1]);
 
     init();
     

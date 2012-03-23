@@ -9,6 +9,8 @@ class Pipeline
 {
 public:
 
+	Pipeline(StateContext& ctx);
+
 	StateContext const* context() const;
 
 	StateContext* context();
@@ -20,11 +22,16 @@ private:
 	StateContext* _context;
 };
 
-StateContext const* Pipeline::context() const {
+
+inline Pipeline::Pipeline(StateContext& ctx)
+: _context(&ctx) {
+}
+
+inline StateContext const* Pipeline::context() const {
 	return _context;
 }
 
-StateContext* Pipeline::context() {
+inline StateContext* Pipeline::context() {
 	return _context;
 }
 

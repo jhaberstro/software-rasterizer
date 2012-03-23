@@ -1,5 +1,6 @@
 #include "Pipeline.hpp"
 #include <tuple>
+#include <cstdio>
 
 inline void process_vert(StateContext& ctx, glm::vec3& processedVert, VaryingData& vshOutput) {
 	assert(vshOutput[0].type == Vec4);
