@@ -4,63 +4,7 @@
 #include <cmath>
 #include <glm/gtc/swizzle.hpp>
 
-// inline float TriangleArea(glm::vec3& v0, glm::vec3& v1, glm::vec3& v2) {
-// 	return 0.5f * glm::length(glm::cross(v1 - v0, v2 - v0));
-// }
-
-// template<typename TPointsContainer >
-// inline void DrawPoints(Framebuffer& fb, TPointsContainer const& v, uint32_t color) {
-// 	for (glm::vec2 p0 : v) {
-// 		fb.set_pixel(p0.x,      p0.y, reinterpret_cast< uint8_t* >(&color));
-// 		fb.set_pixel(p0.x+1.0f, p0.y, reinterpret_cast< uint8_t* >(&color));
-// 		fb.set_pixel(p0.x-1.0f, p0.y, reinterpret_cast< uint8_t* >(&color));
-// 		fb.set_pixel(p0.x,      p0.y+1.0f, reinterpret_cast< uint8_t* >(&color));
-// 		fb.set_pixel(p0.x,      p0.y+1.0f, reinterpret_cast< uint8_t* >(&color));
-// 	}
-// }
-
-// inline void DrawFlatBottomTriangle(StateContext& ctx, Shader& fsh, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, TriangleData& triangle) {
-// 	glm::vec3& v0 = get_triangle_vert0(triangle);
-// 	glm::vec3& v1 = get_triangle_vert1(triangle);
-// 	glm::vec3& v2 = get_triangle_vert2(triangle);
-// 	VaryingData& varying0 = get_triangle_varying0(triangle);
-// 	VaryingData& varying1 = get_triangle_varying1(triangle);
-// 	VaryingData& varying2 = get_triangle_varying2(triangle);
-// 	float area = TriangleArea(v0, v1, v2);
-// 	float invz0 = 1.0f / v0.z;
-// 	float invz1 = 1.0f / v1.z;
-// 	float invz2 = 1.0f / v2.z;
-
-// 	float dy = p0.y < p1.y ? 1 : -1;
-// 	float dx_left  = (p1.x - p0.x) / std::fabsf(p1.y - p0.y);
-// 	float dx_right = (p2.x - p0.x) / std::fabsf(p2.y - p0.y);
-// 	float dz_left  = (p1.z - p0.z) / std::fabsf(p1.y - p0.y);
-// 	float dz_right = (p2.z - p0.z) / std::fabsf(p2.y - p0.y);
-// 	float x_left = p0.x, x_right = p0.x, z_left = p0.z, z_right = p0.z;
-// 	for (float y = p0.y; dy == -1 ? y >= p1.y : y <= p1.y; y += dy) {
-// 		for (float x = x_left; x <= x_right; x += 1.0f) {
-// 			float depth = z_left + ((z_right - z_left) * ((x - x_left) / (x_right - x_left)));
-// 			float currentDepth;
-// 			ctx.depth_buffer().get_pixel(x, y, reinterpret_cast< uint8_t* >(&currentDepth));
-// 			if (depth > currentDepth) {
-// 				continue;
-// 			}
-
-// 			ctx.depth_buffer().set_pixel(x, y, reinterpret_cast< uint8_t* >(&depth));
-			
-// 			glm::vec4 color = fsh.ffunc(std::get< 3 >(triangle), fsh.uniforms);
-// 			ctx.framebuffer().set_pixel(ceil(x), ceil(y), reinterpret_cast< uint8_t* >(&color));
-// 		}
-
-// 		x_left += dx_left;
-// 		x_right += dx_right;
-// 		z_left += dz_left;
-// 		z_right += dz_right;
-// 	}
-// }
-
-
-void default_rasteriser(StateContext& ctx, Shader& fsh, TriangleData& triangle) {
+void default_rasteriser(StateContext& ctx, Shader const& fsh, TriangleData& triangle) {
 	glm::vec3& p0 = get_triangle_vert0(triangle);
 	glm::vec3& p1 = get_triangle_vert1(triangle);
 	glm::vec3& p2 = get_triangle_vert2(triangle);
@@ -68,6 +12,10 @@ void default_rasteriser(StateContext& ctx, Shader& fsh, TriangleData& triangle) 
     float miny = std::max(0.0f, std::min(std::min(p0.y, p1.y), p2.y));
     float maxx = std::min(float(ctx.framebuffer().width() - 1),  std::max(std::max(p0.x, p1.x), p2.x));
     float maxy = std::min(float(ctx.framebuffer().height() - 1), std::max(std::max(p0.y, p1.y), p2.y));
+
+    printf("p0: (%f, %f, %f)\n", p0[0], p0[1], p0[2]);
+    printf("p1: (%f, %f, %f)\n", p1[0], p1[1], p1[2]);
+    printf("p2: (%f, %f, %f)\n\n", p2[0], p2[1], p2[2]);
 
     // All derived from:
     //  float edge01 = (dx01 * (y - p0.y)) - (dy01 * (x - p0.x));
@@ -144,16 +92,14 @@ void default_rasteriser(StateContext& ctx, Shader& fsh, TriangleData& triangle) 
         for (float x = minx; x < maxx; x += 1.0f) {
             if (cx01 >= 0.0f && cx12 >= 0.0f && cx20 >= 0.0f) {
                 float currentDepth;
-                ctx.depth_buffer().get_pixel(x, y, reinterpret_cast< uint8_t* >(&currentDepth));
-                if (z > currentDepth) {
-                    continue;
+                ctx.depth_buffer().get_pixel(x, y, &currentDepth);
+                if (z <= currentDepth) {
+                    glm::vec4 color = fsh.ffunc(varyings, fsh.uniforms);
+                    color *= glm::vec4(255.0f);
+                    uint32_t pixel = (static_cast< uint32_t >(color[3]) << 24) | (static_cast< uint32_t >(color[2]) << 16) | (static_cast< uint32_t >(color[1]) << 8) | static_cast< uint32_t >(color[0]);  
+                    ctx.depth_buffer().set_pixel(x, y, &z);
+                    ctx.framebuffer().set_pixel(x, y, &pixel);
                 }
-
-                glm::vec4 color = fsh.ffunc(varyings, fsh.uniforms);
-                color *= glm::vec4(255.0f);
-                uint32_t pixel = (static_cast< uint32_t >(color[3]) << 24) | (static_cast< uint32_t >(color[2]) << 16) | (static_cast< uint32_t >(color[1]) << 8) | static_cast< uint32_t >(color[0]);  
-                ctx.depth_buffer().set_pixel(x, y, reinterpret_cast< uint8_t* >(&z));
-                ctx.framebuffer().set_pixel(x, y, reinterpret_cast< uint8_t* >(&pixel));
             }
 
             cx01 -= dy01;

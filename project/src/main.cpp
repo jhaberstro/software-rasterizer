@@ -19,32 +19,33 @@ enum : size_t
 	HEIGHT = 480
 };
 
-VaryingData vsh_func(size_t vindex, std::vector< VertexArray >& attributes, std::vector< ShaderVariable >& uniforms) {
-    VertexArray& va = attributes[0];
-    glm::vec3& position = reinterpret_cast< glm::vec3* >(va.vertices)[vindex];
-    glm::vec4& color = reinterpret_cast< glm::vec4* >(attributes[1].vertices)[vindex];
-    glm::mat4x4& modelview = uniforms[0].m4;
-    glm::mat4x4& projection = uniforms[1].m4;
+VaryingData vsh_func(size_t vindex, std::vector< VertexArray > const& attributes, std::vector< ShaderVariable > const& uniforms) {
+    auto& va = attributes[0];
+    auto& position   = reinterpret_cast< glm::vec3* >(va.vertices)[vindex];
+    auto& color      = reinterpret_cast< glm::vec4* >(attributes[1].vertices)[vindex];
+    glm::mat4x4 const& modelview  = uniforms[0].m4;
+    glm::mat4x4 const& projection = uniforms[1].m4;
+
     VaryingData output;
     output.push_back(projection * modelview * glm::vec4(position.x, position.y, position.z, 1.0f));
     output.push_back(color);
-    printf("vindex: %i\tcolor (%f, %f, %f, %f)\n", vindex, color[0], color[1], color[2], color[3]);
     return output;
 }
 
-glm::vec4 fsh_func(ShaderVariable* varyings, std::vector< ShaderVariable >& uniforms) {
+glm::vec4 fsh_func(ShaderVariable* varyings, std::vector< ShaderVariable > const& uniforms) {
     return (varyings[0].v4);
 }
 
 void init(void) {
+    Pipeline pipeline(context);
     float depthClear = 100.0f;
     context.set_framebuffer(WIDTH, HEIGHT, 4);
     context.set_viewport(0, 0, WIDTH, HEIGHT);
     context.set_depth_range(0.0f, 1.0f);
-    context.depth_buffer().clear(reinterpret_cast< uint8_t* >(&depthClear));
+    context.depth_buffer().clear(&depthClear);
 
     Framebuffer& framebuffer = context.framebuffer();
-    ShaderVariable modelview = ShaderVariable(glm::mat4x4());
+    ShaderVariable modelview = glm::translate(glm::mat4x4(), glm::vec3(-1.0f, 0.0f, 0.0f));
     ShaderVariable projection = glm::perspective(60.0f, static_cast< float >(WIDTH) / static_cast< float >(HEIGHT), 0.1f, 100.0f); // glm::ortho(0.0f, static_cast< float >(WIDTH), 0.0f, static_cast< float >(HEIGHT));
 
     Shader vsh, fsh;
@@ -69,9 +70,14 @@ void init(void) {
     context.set_vertex_shader(vsh);
     context.set_fragment_shader(fsh);
     context.draw(attributes, 0, 3);
-
-    Pipeline pipeline(context);
     pipeline.execute(default_rasteriser);
+
+    for (auto& p : positions) {
+        p += glm::vec3(1.7f, 0.0, -0.01f);
+    }
+    context.draw(attributes, 0, 3);
+    pipeline.execute(default_rasteriser);
+
 
 	glGenTextures(1, &framebuffer_tex);
 	glBindTexture(GL_TEXTURE_2D, framebuffer_tex);

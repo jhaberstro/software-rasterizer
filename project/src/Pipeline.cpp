@@ -22,7 +22,7 @@ inline void process_vert(StateContext& ctx, glm::vec3& processedVert, VaryingDat
 
 void Pipeline::execute(RasteriserFunc rasterf) {
 	while (_context->drawCalls.empty() == false) {
-		DrawCall* drawCall = _context->drawCalls.back();
+		DrawCall* drawCall = _context->drawCalls.front();
 		_context->drawCalls.pop();
 
 		// Assuming straight up triangles, not triangle lists or quads or lines or whatever
@@ -31,15 +31,15 @@ void Pipeline::execute(RasteriserFunc rasterf) {
 		for (size_t i = drawCall->startVert; i < drawCall->numVerts; i += 3) {
 			TriangleData triangle = std::make_tuple(
 				glm::vec3(), glm::vec3(), glm::vec3(),
-				drawCall->vertexShader.vfunc(i,   drawCall->attributeData, drawCall->vertexShader.uniforms),
-				drawCall->vertexShader.vfunc(i+1, drawCall->attributeData, drawCall->vertexShader.uniforms),
-				drawCall->vertexShader.vfunc(i+2, drawCall->attributeData, drawCall->vertexShader.uniforms)
+				drawCall->vertexShader->vfunc(i,   *drawCall->attributeData, drawCall->vertexShader->uniforms),
+				drawCall->vertexShader->vfunc(i+1, *drawCall->attributeData, drawCall->vertexShader->uniforms),
+				drawCall->vertexShader->vfunc(i+2, *drawCall->attributeData, drawCall->vertexShader->uniforms)
 			);
 
 			process_vert(*_context, get_triangle_vert0(triangle), get_triangle_varying0(triangle));
 			process_vert(*_context, get_triangle_vert1(triangle), get_triangle_varying1(triangle));
 			process_vert(*_context, get_triangle_vert2(triangle), get_triangle_varying2(triangle));
-			rasterf(*_context, drawCall->fragmentShader, triangle);
+			rasterf(*_context, *drawCall->fragmentShader, triangle);
 		}
 
 		delete drawCall;

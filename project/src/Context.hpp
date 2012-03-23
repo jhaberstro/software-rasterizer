@@ -73,8 +73,8 @@ struct ShaderVariable
 
 using VaryingData = std::vector< ShaderVariable >;
 // first element of returned vector of VertShaderFunc must be the output position
-using VertShaderFunc = VaryingData (*) (size_t vindex, std::vector< VertexArray >& attributes, std::vector< ShaderVariable >& uniforms);
-using FragShaderFunc = glm::vec4 (*) (ShaderVariable* varyings, std::vector< ShaderVariable >& uniforms);
+using VertShaderFunc = VaryingData (*) (size_t vindex, std::vector< VertexArray > const& attributes, std::vector< ShaderVariable > const& uniforms);
+using FragShaderFunc = glm::vec4 (*) (ShaderVariable* varyings, std::vector< ShaderVariable > const& uniforms);
 
 // The thought is that since author of the shader is responsible
 // for determining how uniform data is layed out, providing a
@@ -92,9 +92,9 @@ struct Shader
 
 struct DrawCall
 {
-	Shader vertexShader;
-	Shader fragmentShader;
-	std::vector< VertexArray > attributeData;
+	Shader const* vertexShader;
+	Shader const* fragmentShader;
+	std::vector< VertexArray > const* attributeData;
 	size_t startVert;
 	size_t numVerts;
 };
@@ -147,7 +147,7 @@ private:
 };
 
 typedef std::tuple<glm::vec3, glm::vec3, glm::vec3, VaryingData, VaryingData, VaryingData > TriangleData;
-using RasteriserFunc = void (*) (StateContext& ctx, Shader& fsh, TriangleData& triangle);
+using RasteriserFunc = void (*) (StateContext& ctx, Shader const& fsh, TriangleData& triangle);
 
 inline glm::vec3& get_triangle_vert0(TriangleData& vd) { return std::get< 0 >(vd); }
 inline glm::vec3& get_triangle_vert1(TriangleData& vd) { return std::get< 1 >(vd); }

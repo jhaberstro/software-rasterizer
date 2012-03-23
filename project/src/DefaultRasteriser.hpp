@@ -5,6 +5,6 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-void default_rasteriser(StateContext& ctx, Shader& fsh, TriangleData& triangle);
+void default_rasteriser(StateContext& ctx, Shader const& fsh, TriangleData& triangle);
 
 #endif // JHSR_DEFAULT_RASTERISER_HPP

@@ -20,7 +20,7 @@
 	        // "-I/usr/lib/clang/2.1/include/",
 	        // "-I/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/",
 	        // "-I/usr/lib/gcc/i686-apple-darwin11/4.2.1/include/",
-	        "-Lexternal/libcxx/lib", "-lc++", "-isystem external/libcxx/include/",
+	        "-isystem external/libcxx/include/",
 	        "-I/Users/jhaberstro/Personal-Projects/software-rasterizer/project/external/glm/",
 	        //"-I/usr/lib/include/c++/v1/",
 	        "-I/usr/lib/clang/3.1/include/",

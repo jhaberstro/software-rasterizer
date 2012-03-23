@@ -15,11 +15,13 @@ void StateContext::set_framebuffer(size_t w, size_t h, size_t bytesPerPixel) {
 	_depthBuffer = new Framebuffer(w, h, 4);
 }
 
-void StateContext::draw(const std::vector<VertexArray> &attributes, size_t start, size_t num) {
+void StateContext::draw(const std::vector< VertexArray > const& attributes, size_t start, size_t num) {
+	assert(_currentVsh != nullptr);
+	assert(_currentFsh != nullptr);
 	DrawCall* newDrawCall = new DrawCall;
-	newDrawCall->attributeData = attributes;
-	newDrawCall->vertexShader = std::move(*_currentVsh);
-	newDrawCall->fragmentShader = std::move(*_currentFsh);
+	newDrawCall->attributeData = &attributes;
+	newDrawCall->vertexShader = _currentVsh;
+	newDrawCall->fragmentShader = _currentFsh;
 	newDrawCall->startVert = start;
 	newDrawCall->numVerts = num;		
 	drawCalls.push(newDrawCall);
