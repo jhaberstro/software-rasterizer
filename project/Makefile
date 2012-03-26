@@ -5,7 +5,7 @@ INCLUDE_FLAGS=-Iexternal/glm/ -isystem external/libcxx/include/
 BIN_DIR=bin
 OBJ_DIR=build
 SOURCE_DIR=src
-SOURCES=src/main.cpp src/Framebuffer.cpp src/Renderer.cpp src/Pipeline.cpp src/DefaultRasteriser.cpp
+SOURCES=src/main.cpp src/Framebuffer.cpp src/Renderer.cpp src/DefaultRasteriser.cpp
 OBJECTS= $(addprefix $(OBJ_DIR)/, \
 		$(patsubst %.cpp, %.o,  \
 		$(patsubst %.c, %.o, $(SOURCES))))

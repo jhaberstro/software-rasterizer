@@ -6,7 +6,6 @@
 #include <cmath>
 #include <tuple>
 #include "Renderer.hpp"
-#include "Pipeline.hpp"
 #include "DefaultRasteriser.hpp"
 
 Renderer renderer;
@@ -19,16 +18,19 @@ enum : size_t
 	HEIGHT = 480
 };
 
+
+
 VaryingData vsh_func(size_t vindex, std::vector< VertexArray > const& attributes, std::vector< ShaderVariable > const& uniforms) {
-    auto& va = attributes[0];
-    auto& position   = reinterpret_cast< glm::vec3* >(va.vertices)[vindex];
+    auto& position   = reinterpret_cast< glm::vec3* >(attributes[0].vertices)[vindex];
     auto& color      = reinterpret_cast< glm::vec4* >(attributes[1].vertices)[vindex];
+    auto f           = reinterpret_cast< float* >(attributes[2].vertices)[vindex];
     glm::mat4x4 const& modelview  = uniforms[0].m4;
     glm::mat4x4 const& projection = uniforms[1].m4;
 
     VaryingData output;
     output.push_back(projection * modelview * glm::vec4(position.x, position.y, position.z, 1.0f));
     output.push_back(color);
+    output.push_back(f);
     return output;
 }
 
@@ -36,8 +38,31 @@ glm::vec4 fsh_func(ShaderVariable* varyings, std::vector< ShaderVariable > const
     return (varyings[0].v4);
 }
 
+void GLEquivalient() {
+    auto modelview = glm::translate(glm::mat4x4(), glm::vec3(-1.0f, -0.5f, 0.0f));
+    auto projection = glm::perspective(60.0f, static_cast< float >(WIDTH) / static_cast< float >(HEIGHT), 0.1f, 100.0f);
+    glm::vec3 positions[] = { glm::vec3(-1.0f, -1.0f, -3.0f), glm::vec3(1.0f, -1.0f, -3.0f), glm::vec3(0.0f, 1.0f, -3.0f), glm::vec3(1.0f, 1.0f, -3.0f), glm::vec3(1.0, 2.0f, -3.0f) };
+    glm::vec4 colors[] = { glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f) };
+
+    glViewport(0, 0, WIDTH, HEIGHT);
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixf(&projection[0][0]);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(&modelview[0][0]);
+    glEnable(GL_DEPTH_TEST);
+
+    glClearColor(0, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glBegin(GL_TRIANGLE_STRIP);
+    for (int i = 0; i < sizeof(positions) / sizeof(positions[0]); ++i) {
+        glColor4fv((GLfloat*)(colors + i));
+        glVertex3fv((GLfloat*)(positions + i));
+    }
+    glEnd();
+}
+
 void init(void) {
-    Pipeline pipeline(renderer);
     float depthClear = 100.0f;
     renderer.set_framebuffer(WIDTH, HEIGHT, 4);
     renderer.set_viewport(0, 0, WIDTH, HEIGHT);
@@ -45,36 +70,32 @@ void init(void) {
     renderer.depth_buffer().clear(&depthClear);
 
     Framebuffer& framebuffer = renderer.framebuffer();
-    ShaderVariable modelview = glm::translate(glm::mat4x4(), glm::vec3(-1.0f, 0.0f, 0.0f));
-    ShaderVariable projection = glm::perspective(60.0f, static_cast< float >(WIDTH) / static_cast< float >(HEIGHT), 0.1f, 100.0f); // glm::ortho(0.0f, static_cast< float >(WIDTH), 0.0f, static_cast< float >(HEIGHT));
 
-    Shader vsh, fsh;
-    vsh.uniforms.push_back(modelview);
-    vsh.uniforms.push_back(projection);
-    vsh.vfunc = vsh_func;
-    fsh.ffunc = fsh_func;
-
-    glm::vec3 positions[] = {
-        glm::vec3(-1.0f, -1.0f, -3.0f), glm::vec3(1.0f, -1.0f, -3.0f), glm::vec3(0.0f, 1.0f, -3.0f)
-    };
-    glm::vec4 colors[] = {
-        glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)
-    };
-    VertexArray pa; pa.stride = 0; pa.components = 3; pa.vertices = positions;
-    VertexArray ca; ca.stride = 0; ca.components = 4; ca.vertices = colors;
+    glm::vec3 positions[] = { glm::vec3(-1.0f, -1.0f, -3.0f), glm::vec3(1.0f, -1.0f, -3.0f), glm::vec3(0.0f, 1.0f, -3.0f), glm::vec3(1.0f, 1.0f, -3.0f), glm::vec3(1.0, 2.0f, -3.0f) };
+    glm::vec4 colors[] = { glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(1.0f), glm::vec4(1.0f, 1.0f, 0.0f, 1.0f) };
+    float f[] = {0.0f, 0.2f, 0.4, 0.6f, 0.8f};
+    VertexArray pa(3, 0, positions);
+    VertexArray ca(4, 0, colors);
+    VertexArray fa(1, 0, f);
     std::vector< VertexArray > attributes;
     attributes.push_back(pa);
     attributes.push_back(ca);
+    attributes.push_back(fa);
+
+    auto modelview = glm::translate(glm::mat4x4(), glm::vec3(-1.0f, -0.5f, 0.0f));
+    auto projection = glm::perspective(60.0f, static_cast< float >(WIDTH) / static_cast< float >(HEIGHT), 0.1f, 100.0f);
+    Shader vsh(vsh_func), fsh(fsh_func);
+    vsh.uniforms.push_back(modelview);
+    vsh.uniforms.push_back(projection);
 
     renderer.set_vertex_shader(vsh);
     renderer.set_fragment_shader(fsh);
-    renderer.draw(attributes, 0, 3);
-    pipeline.execute(default_rasteriser);
 
-    vsh.uniforms[0] = glm::translate(vsh.uniforms[0].m4, glm::vec3(1.7f, 0.0f, -0.01f));
-    renderer.draw(attributes, 0, 3);
-    pipeline.execute(default_rasteriser);
+    renderer.set_primitive_topology(PrimitiveTopology::TriangleStrip);
+    renderer.draw(attributes, 0, 5);
 
+    // vsh.uniforms[0] = glm::translate(vsh.uniforms[0].m4, glm::vec3(1.7f, 0.0f, -0.01f));
+    // renderer.draw(attributes, 0, 3);
 
 	glGenTextures(1, &framebuffer_tex);
 	glBindTexture(GL_TEXTURE_2D, framebuffer_tex);
@@ -99,6 +120,7 @@ void display(void) {
     glBindFramebuffer(GL_READ_FRAMEBUFFER, read_fbo);
     glReadBuffer(GL_COLOR_ATTACHMENT0);
     glBlitFramebuffer(0, 0, framebuffer.width(), framebuffer.height(), 0, 0, framebuffer.width(), framebuffer.height(), GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    // GLEquivalient();
 
     glutSwapBuffers();
 }

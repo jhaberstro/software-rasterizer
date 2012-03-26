@@ -60,7 +60,8 @@ typedef glm::vec4 (*FragShaderFunc) (ShaderVariable* varyings, std::vector< Shad
 // straight list of shader variables is reasonable.
 struct Shader
 {
-
+	Shader(VertShaderFunc vsh) : vfunc(vsh) {}
+	Shader(FragShaderFunc fsh) : ffunc(fsh) {}
 
 	std::vector< ShaderVariable > uniforms;
 	union {

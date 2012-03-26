@@ -4,8 +4,14 @@
 #include "Framebuffer.hpp"
 #include "Shader.hpp"
 #include "VertexArray.hpp"
+#include "DefaultRasteriser.hpp"
 #include <vector>
-#include <queue>
+
+enum class PrimitiveTopology
+{
+	TriangleList,
+	TriangleStrip
+};
 
 struct Viewport
 {
@@ -13,7 +19,7 @@ struct Viewport
 	float near, far;
 };
 
-struct Renderer
+class Renderer
 {
 	friend class Pipeline;
 
@@ -35,6 +41,10 @@ public:
 
 	void set_framebuffer(size_t w, size_t h, size_t bytesPerPixel);
 
+	void set_rasteriser(RasteriserFunc rasterf);
+
+	void set_primitive_topology(PrimitiveTopology topology);
+
 	Framebuffer& framebuffer();
 
 	Framebuffer const& framebuffer() const;
@@ -45,31 +55,24 @@ public:
 
 	Viewport const& viewport() const;
 
-protected:
-
-	struct DrawCall
-	{
-		Shader const* vertexShader;
-		Shader const* fragmentShader;
-		std::vector< VertexArray > const* attributeData;
-		size_t startVert;
-		size_t numVerts;
-	};
-
+	PrimitiveTopology primitive_topology() const;
 
 private:
 
 	Viewport _viewport;
 	Framebuffer* _framebuffer;
-	Framebuffer* _depthBuffer;
-	std::queue< DrawCall* > drawCalls;
+	Framebuffer* _depthBuffer;	
+	RasteriserFunc _rasterf;
+	PrimitiveTopology _primitiveTopology;
 
 	Shader* _currentVsh;
 	Shader* _currentFsh;
 };
 
 
-inline Renderer::Renderer() {
+inline Renderer::Renderer()
+: _rasterf(default_rasteriser),
+  _primitiveTopology(PrimitiveTopology::TriangleList) {
 	_viewport.near = 0.0f;
 	_viewport.far = 1.0f;
 }
@@ -99,6 +102,14 @@ inline void Renderer::set_depth_range(float near, float far) {
 	_viewport.far = std::max(0.0f, std::min(far, 1.0f));
 }
 
+inline void Renderer::set_rasteriser(RasteriserFunc rasterf) {
+	_rasterf = rasterf;
+}
+
+inline void Renderer::set_primitive_topology(PrimitiveTopology topology) {
+	_primitiveTopology = topology;
+}
+
 inline Framebuffer& Renderer::framebuffer() {
 	return *_framebuffer;
 }
@@ -118,4 +129,9 @@ inline Framebuffer const& Renderer::depth_buffer() const {
 inline Viewport const& Renderer::viewport() const {
 	return _viewport;
 }
+
+inline PrimitiveTopology Renderer::primitive_topology() const {
+	return _primitiveTopology;
+}
+
 #endif // JHSR_RENDERER_HPP
