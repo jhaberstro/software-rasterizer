@@ -6,170 +6,72 @@
 #include <glm/gtc/swizzle.hpp>
 #include "FixedPointMath.hpp"
 
-// void default_rasteriser(Renderer* renderer, Shader const& fsh, TriangleData& triangle) {
-// 	glm::vec3& p0 = get_triangle_vert0(triangle);
-// 	glm::vec3& p1 = get_triangle_vert1(triangle);
-// 	glm::vec3& p2 = get_triangle_vert2(triangle);
-//     float minx = std::max(0.0f, std::min(std::min(p0.x, p1.x), p2.x));
-//     float miny = std::max(0.0f, std::min(std::min(p0.y, p1.y), p2.y));
-//     float maxx = std::min(float(renderer->framebuffer().width() - 1),  std::max(std::max(p0.x, p1.x), p2.x));
-//     float maxy = std::min(float(renderer->framebuffer().height() - 1), std::max(std::max(p0.y, p1.y), p2.y));
+// Ax + By + Cz + D = 0, where (A, B, C) is normal to the tri-plane
+// -> z = -A/C*x - B/C*y - D
+template< typename T >
+inline std::tuple< T, T, T > calculate_gradients(T const& u0, T const& u1, T const& u2, glm::vec4 const& p0, glm::vec4 const& p1, glm::vec4 const& p2, int minx, int miny) {
+    auto u20  = u2 - u0,     u10 = u1 - u0;
+    auto x20  = p2.x - p0.x, x10 = p1.x - p0.x;
+    auto y20  = p2.y - p0.y, y10 = p1.y - p0.y;
+    auto A    = u20 * y10 - u10 * y20;
+    auto B    = x20 * u10 - x10 * u20;
+    auto invC = 1.0f / ((x10) * y20 - (x20) * y10);           
+    auto dudx = -A * invC;                                                                                
+    auto dudy = -B * invC;                                                                                
+    auto cu   = u0 + (dudx * (minx - p0.x)) + (dudy * (miny - p0.y));   
+    return std::make_tuple(dudx, dudy, cu);                        
+}
 
-//     printf("min: (%f, %f)\tmax: (%f, %f)\n", float(minx), float(miny), float(maxx), float(maxy));
-
-//     // All derived from:
-//     //  float edge01 = (dx01 * (y - p0.y)) - (dy01 * (x - p0.x));
-//     //  float edge12 = (dx12 * (y - p1.y)) - (dy12 * (x - p1.x));
-//     //  float edge20 = (dx20 * (y - p2.y)) - (dy20 * (x - p2.x));
-//     float dx01 = (p1.x - p0.x);
-//     float dx12 = (p2.x - p1.x);
-//     float dx20 = (p0.x - p2.x);
-//     float dy01 = (p1.y - p0.y);
-//     float dy12 = (p2.y - p1.y);
-//     float dy20 = (p0.y - p2.y);
-//     float c01 = (dx01 * -p0.y) + (dy01 * p0.x);
-//     float c12 = (dx12 * -p1.y) + (dy12 * p1.x);
-//     float c20 = (dx20 * -p2.y) + (dy20 * p2.x);
-
-//     // Correct for fill convention
-//     if (dy01 < 0 || (dy01 == 0.0f && dx01 > 0)) c01 += 1;
-//     if (dy12 < 0 || (dy12 == 0.0f && dx12 > 0)) c12 += 1;
-//     if (dy20 < 0 || (dy20 == 0.0f && dx20 > 0)) c20 += 1;
-
-//     float cy01 = (dx01 * miny) + (dy01 * -minx) + c01;
-//     float cy12 = (dx12 * miny) + (dy12 * -minx) + c12;
-//     float cy20 = (dx20 * miny) + (dy20 * -minx) + c20;
-
-//     // Ax + By + Cz + D = 0, where (A, B, C) is normal to the tri-plane
-//     // -> z = -A/C*x - B/C*y - D
-//     glm::vec3 triNormal = glm::normalize(glm::cross(p1 - p0, p2 - p0));
-//     float dzdx = -triNormal[0] / triNormal[2];
-//     float dzdy = -triNormal[1] / triNormal[2];
-//     float cz = p0.z + (dzdx * (minx - p0.x)) + (dzdy * (miny - p0.y));
-
-//     auto& varying0 = get_triangle_varying0(triangle);
-//     auto& varying1 = get_triangle_varying1(triangle);
-//     auto& varying2 = get_triangle_varying2(triangle);
-//     VaryingData interpolatedVaryings;
-//     VaryingData xgradients;
-//     VaryingData ygradients;
-//     interpolatedVaryings.reserve(varying0.size() - 1);
-//     xgradients.reserve(varying0.size() - 1);
-//     ygradients.reserve(varying0.size() - 1);
-//     for (int i = 1; i < varying0.size(); ++i) {
-//         ShaderVariable& sv0 = varying0[i];
-//         ShaderVariable& sv1 = varying1[i];
-//         ShaderVariable& sv2 = varying2[i];
-//         switch(sv0.type) {
-//             case Vec4: {
-//                 glm::vec4 A    = (sv2.v4 - sv0.v4) * (p1.y - p0.y) - (sv1.v4 - sv0.v4) * (p2.y - p0.y);                
-//                 glm::vec4 B    = (p2.x - p0.x) * (sv1.v4 - sv0.v4) - (p1.x - p0.x) * (sv2.v4 - sv0.v4);
-//                 float invC     = 1.0f / ((p1.x - p0.x) * (p2.y - p0.y) - (p2.x - p0.x) * (p1.y - p0.y)); 
-//                 glm::vec4 dvdx = -A * invC;
-//                 glm::vec4 dvdy = -B * invC;
-//                 glm::vec4 cv   = sv0.v4 + (dvdx * (minx - p0.x)) + (dvdy * (miny - p0.y));
-//                 interpolatedVaryings.push_back(cv);
-//                 xgradients.push_back(dvdx);
-//                 ygradients.push_back(dvdy);
-//                 break;
-//             }
-
-//             default: {
-//                 assert(false);
-//                 break;
-//             }
-//         }
-//     }
-
-//     size_t bufferSize = interpolatedVaryings.size() * sizeof(ShaderVariable);
-//     uint8_t varyingsBuffer[bufferSize];
-//     ShaderVariable* varyings = reinterpret_cast< ShaderVariable* >(&varyingsBuffer[0]);
-//     for (float y = miny; y <= maxy; y += 1.0f) {
-//         float cx01 = cy01;
-//         float cx12 = cy12;
-//         float cx20 = cy20;
-//         float z    = cz;
-//         std::memcpy(varyings, &interpolatedVaryings[0], bufferSize);
-//         for (float x = minx; x <= maxx; x += 1.0f) {
-//             if (cx01 > 0.0f && cx12 > 0.0f && cx20 > 0.0f) {
-//                 float currentDepth;
-//                 renderer->depth_buffer().get_pixel(x, y, &currentDepth);
-//                 if (z <= currentDepth) {
-//                     glm::vec4 color = fsh.ffunc(varyings, fsh.uniforms);
-//                     color *= glm::vec4(255.0f);
-//                     uint32_t pixel = (static_cast< uint32_t >(color[3]) << 24) | (static_cast< uint32_t >(color[2]) << 16) | (static_cast< uint32_t >(color[1]) << 8) | static_cast< uint32_t >(color[0]);  
-//                     renderer->depth_buffer().set_pixel(x, y, &z);
-//                     renderer->framebuffer().set_pixel(x, y, &pixel);
-//                 }
-//             }
-
-//             cx01 -= dy01;
-//             cx12 -= dy12;
-//             cx20 -= dy20;
-//             z    += dzdx;
-//             for (int i = 0; i < interpolatedVaryings.size(); ++i) {
-//                 varyings[i] += xgradients[i];
-//             }
-//         }
-
-//         cy01 += dx01;
-//         cy12 += dx12;
-//         cy20 += dx20;
-//         cz   += dzdy;
-//         for (int i = 0; i < interpolatedVaryings.size(); ++i) {
-//             interpolatedVaryings[i] += ygradients[i];
-//         }
-//     }
-// }
+#define CALC_DELTAS(u0, u1, u2, rp0, rp1, rp2, minx, miny) {                                                            \
+        decltype(u0) dvdx, dvdy, cv;                                                                            \
+        std::tie(dvdx, dvdy, cv) = calculate_gradients(u0, u1, u2, rp0, rp1, rp2, minx, miny);                          \
+        interpolatedVaryings.push_back(cv);                                                                             \
+        xgradients.push_back(dvdx);                                                                                     \
+        ygradients.push_back(dvdy);                                                                                     \
+    }
 
 void default_rasteriser(Renderer* renderer, Shader const& fsh, TriangleData& triangle) {
-    typedef FixedPointVector3< 4 > vec3_fp;
-    typedef FixedPointReal< 4 > float_fp;
+    enum { P = 4 };
+    glm::vec4& p0 = get_triangle_vert0(triangle);
+    glm::vec4& p1 = get_triangle_vert1(triangle);
+    glm::vec4& p2 = get_triangle_vert2(triangle);
+    glm::ivec2 ip0(iround(p0.x * fixed_base< P >()), iround(p0.y * fixed_base< P >()));
+    glm::ivec2 ip1(iround(p1.x * fixed_base< P >()), iround(p1.y * fixed_base< P >()));
+    glm::ivec2 ip2(iround(p2.x * fixed_base< P >()), iround(p2.y * fixed_base< P >()));
+    int minx = iround(std::max(0.0f, std::min(std::min(p0.x, p1.x), p2.x)));
+    int miny = iround(std::max(0.0f, std::min(std::min(p0.y, p1.y), p2.y)));
+    int maxx = iround(std::min(float(renderer->framebuffer().width() - 1),  std::max(std::max(p0.x, p1.x), p2.x)));
+    int maxy = iround(std::min(float(renderer->framebuffer().height() - 1), std::max(std::max(p0.y, p1.y), p2.y)));
 
-    glm::vec3& rp0 = get_triangle_vert0(triangle);
-    glm::vec3& rp1 = get_triangle_vert1(triangle);
-    glm::vec3& rp2 = get_triangle_vert2(triangle);
-    glm::ivec3 p0(rp0.x, rp0.y, rp0.z);
-    glm::ivec3 p1(rp1.x, rp1.y, rp1.z);
-    glm::ivec3 p2(rp2.x, rp2.y, rp2.z);
-    int minx = (std::max(0.0f, std::min(std::min(rp0.x, rp1.x), rp2.x)));
-    int miny = (std::max(0.0f, std::min(std::min(rp0.y, rp1.y), rp2.y)));
-    int maxx = (std::min(float(renderer->framebuffer().width() - 1),  std::max(std::max(rp0.x, rp1.x), rp2.x)));
-    int maxy = (std::min(float(renderer->framebuffer().height() - 1), std::max(std::max(rp0.y, rp1.y), rp2.y)));
-    p0 = rp0 * 16.0f;
-    p1 = rp1 * 16.0f;
-    p2 = rp2 * 16.0f;
+    // All derived from:
+    //  float edge01 = (dx01 * (y - p0.y)) - (dy01 * (x - p0.x));
+    //  float edge12 = (dx12 * (y - p1.y)) - (dy12 * (x - p1.x));
+    //  float edge20 = (dx20 * (y - p2.y)) - (dy20 * (x - p2.x));
+    int dx01 = (ip1.x - ip0.x);
+    int dx12 = (ip2.x - ip1.x);
+    int dx20 = (ip0.x - ip2.x);
+    int dy01 = (ip1.y - ip0.y);
+    int dy12 = (ip2.y - ip1.y);
+    int dy20 = (ip0.y - ip2.y);
 
-    int dx01 = (p1.x - p0.x);
-    int dx12 = (p2.x - p1.x);
-    int dx20 = (p0.x - p2.x);
-    int dy01 = (p1.y - p0.y);
-    int dy12 = (p2.y - p1.y);
-    int dy20 = (p0.y - p2.y);
-    int fdx01 = dx01 << 4;
-    int fdx12 = dx12 << 4;
-    int fdx20 = dx20 << 4;
-    int fdy01 = dy01 << 4;
-    int fdy12 = dy12 << 4;
-    int fdy20 = dy20 << 4;
-
-    int c01  = (dy01 * p0.x) - (dx01 * p0.y);
-    int c12  = (dy12 * p1.x) - (dx12 * p1.y);
-    int c20  = (dy20 * p2.x) - (dx20 * p2.y);
+    int c01 = fixed_mult< P >(dx01, -ip0.y) + fixed_mult< P >(dy01, ip0.x);
+    int c12 = fixed_mult< P >(dx12, -ip1.y) + fixed_mult< P >(dy12, ip1.x);
+    int c20 = fixed_mult< P >(dx20, -ip2.y) + fixed_mult< P >(dy20, ip2.x);
 
     // Correct for fill convention
     if (dy01 < 0 || (dy01 == 0 && dx01 > 0)) c01 += 1;
     if (dy12 < 0 || (dy12 == 0 && dx12 > 0)) c12 += 1;
     if (dy20 < 0 || (dy20 == 0 && dx20 > 0)) c20 += 1;
 
-    int cy01 = (dx01 * (miny << 4)) + c01 - (dy01 * (minx << 4));
-    int cy12 = (dx12 * (miny << 4)) + c12 - (dy12 * (minx << 4));
-    int cy20 = (dx20 * (miny << 4)) + c20 - (dy20 * (minx << 4));
-    
-    glm::vec3 triNormal = glm::normalize(glm::cross(rp1 - rp0, rp2 - rp0));
-    float dzdx = -triNormal[0] / triNormal[2];
-    float dzdy = -triNormal[1] / triNormal[2];
-    float cz = rp0.z + (dzdx * (float(minx) - rp0.x)) + (dzdy * (float(miny) - rp0.y));
+    int cy01 = fixed_mult< P >(dx01, (miny << P)) + fixed_mult< P >(dy01, -(minx << P)) + c01;
+    int cy12 = fixed_mult< P >(dx12, (miny << P)) + fixed_mult< P >(dy12, -(minx << P)) + c12;
+    int cy20 = fixed_mult< P >(dx20, (miny << P)) + fixed_mult< P >(dy20, -(minx << P)) + c20;
+
+    // Calculate gradient values for z, 1/w, and all varyings
+    float dzdx, dzdy, cz;
+    float dwdx, dwdy, cw;
+    std::tie(dzdx, dzdy, cz) = calculate_gradients(p0.z, p1.z, p2.z, p0, p1, p2, minx, miny);
+    std::tie(dwdx, dwdy, cw) = calculate_gradients(p0.w, p1.w, p2.w, p0, p1, p2, minx, miny);
 
     auto& varying0 = get_triangle_varying0(triangle);
     auto& varying1 = get_triangle_varying1(triangle);
@@ -183,26 +85,16 @@ void default_rasteriser(Renderer* renderer, Shader const& fsh, TriangleData& tri
     for (int i = 1; i < varying0.size(); ++i) {
         ShaderVariable& sv0 = varying0[i];
         ShaderVariable& sv1 = varying1[i];
-        ShaderVariable& sv2 = varying2[i];
-        #define CALC_DELTAS(member) \
-                auto A    = (sv2.member - sv0.member) * (rp1.y - rp0.y) - (sv1.member - sv0.member) * (rp2.y - rp0.y);          \
-                auto B    = (rp2.x - rp0.x) * (sv1.member - sv0.member) - (rp1.x - rp0.x) * (sv2.member - sv0.member);          \
-                float invC     = 1.0f / ((rp1.x - rp0.x) * (rp2.y - rp0.y) - (rp2.x - rp0.x) * (rp1.y - rp0.y));                \
-                auto dvdx = -A * invC;                                                                                          \
-                auto dvdy = -B * invC;                                                                                          \
-                auto cv   = sv0.member + (dvdx * (float(minx) - rp0.x)) + (dvdy * (float(miny) - rp0.y));                       \
-                interpolatedVaryings.push_back(cv);                                                                             \
-                xgradients.push_back(dvdx);                                                                                     \
-                ygradients.push_back(dvdy)                                                                                    
+        ShaderVariable& sv2 = varying2[i];                                                                             
         switch(sv0.type) {
-            case Float:  { CALC_DELTAS(f);  break; }
-            case Vec4:   { CALC_DELTAS(v4); break; }
-            case Vec3:   { CALC_DELTAS(v3); break; }
-            case Mat3x3: { CALC_DELTAS(m3); break; }
-            case Mat4x4: { CALC_DELTAS(m4); break; }
+            case Float:  { CALC_DELTAS(sv0.f  * p0.w, sv1.f  * p1.w, sv2.f  * p2.w, p0, p1, p2, minx, miny); break; }
+            case Vec2:   { CALC_DELTAS(sv0.v2 * p0.w, sv1.v2 * p1.w, sv2.v2 * p2.w, p0, p1, p2, minx, miny); break; }
+            case Vec3:   { CALC_DELTAS(sv0.v3 * p0.w, sv1.v3 * p1.w, sv2.v3 * p2.w, p0, p1, p2, minx, miny); break; }
+            case Vec4:   { CALC_DELTAS(sv0.v4 * p0.w, sv1.v4 * p1.w, sv2.v4 * p2.w, p0, p1, p2, minx, miny); break; }
+            case Mat3x3: { CALC_DELTAS(sv0.m3 * p0.w, sv1.m3 * p1.w, sv2.m3 * p2.w, p0, p1, p2, minx, miny); break; }
+            case Mat4x4: { CALC_DELTAS(sv0.m4 * p0.w, sv1.m4 * p1.w, sv2.m4 * p2.w, p0, p1, p2, minx, miny); break; }
             default:     { assert(false); break; }
         }
-        #undef CALC_DELTAS
     }
 
     size_t bufferSize = interpolatedVaryings.size() * sizeof(ShaderVariable);
@@ -213,13 +105,16 @@ void default_rasteriser(Renderer* renderer, Shader const& fsh, TriangleData& tri
         int cx12 = cy12;
         int cx20 = cy20;
         float z  = cz;
+        float w  = cw;
         std::memcpy(varyings, &interpolatedVaryings[0], bufferSize);
         for (int x = minx; x <= maxx; x += 1) {
             if (cx01 > 0 && cx12 > 0 && cx20 > 0) {
                 float currentDepth;
                 renderer->depth_buffer().get_pixel(x, y, &currentDepth);
                 if (z <= currentDepth) {
+                    for (int i = 0; i < interpolatedVaryings.size(); ++i) varyings[i] *= 1.0f / w;
                     glm::vec4 color = fsh.ffunc(varyings, fsh.uniforms);
+                    for (int i = 0; i < interpolatedVaryings.size(); ++i) varyings[i] *= w;
                     color *= glm::vec4(255.0f);
                     uint32_t pixel = (static_cast< uint32_t >(color[3]) << 24) | (static_cast< uint32_t >(color[2]) << 16) | (static_cast< uint32_t >(color[1]) << 8) | static_cast< uint32_t >(color[0]);  
                     renderer->depth_buffer().set_pixel(x, y, &z);
@@ -227,19 +122,21 @@ void default_rasteriser(Renderer* renderer, Shader const& fsh, TriangleData& tri
                 }
             }
 
-            cx01 -= fdy01;
-            cx12 -= fdy12;
-            cx20 -= fdy20;
+            cx01 -= dy01;
+            cx12 -= dy12;
+            cx20 -= dy20;
             z    += dzdx;
+            w    += dwdx;
             for (int i = 0; i < interpolatedVaryings.size(); ++i) {
                 varyings[i] += xgradients[i];
             }
         }
 
-        cy01 += fdx01;
-        cy12 += fdx12;
-        cy20 += fdx20;
+        cy01 += dx01;
+        cy12 += dx12;
+        cy20 += dx20;
         cz   += dzdy;
+        cw   += dwdy;
         for (int i = 0; i < interpolatedVaryings.size(); ++i) {
             interpolatedVaryings[i] += ygradients[i];
         }

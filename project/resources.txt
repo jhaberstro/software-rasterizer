@@ -29,3 +29,5 @@ Software Renderer Accelerated by CUDA: http://maxest.gct-game.net/vainmoinen/bac
 The Bresenham Line-Drawing Algorithm: http://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html
 
 Good course that covers the software rendering pipeline: https://lva.cg.tuwien.ac.at/cg1/wiki/doku.php
+
+Perspective Texturemapping - http://www.lysator.liu.se/~mikaelk/doc/perspectivetexture/

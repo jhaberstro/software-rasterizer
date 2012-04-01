@@ -8,10 +8,11 @@
 enum ShaderDataType : unsigned int
 {
 	Float  = 0,
-	Vec3   = 1,
-	Vec4   = 2,
-	Mat3x3 = 3,
-	Mat4x4 = 4
+	Vec2   = 1,
+	Vec3   = 2,
+	Vec4   = 3,
+	Mat3x3 = 4,
+	Mat4x4 = 5
 };
 
 struct ShaderVariable
@@ -20,6 +21,7 @@ struct ShaderVariable
 	ShaderVariable(ShaderVariable const& sv) : m4(sv.m4), type(sv.type) {}
 	ShaderVariable& operator=(ShaderVariable const& sv) { m4 = sv.m4; type = sv.type; return *this; };
 	ShaderVariable(float f) : f(f), type(Float) {}
+	ShaderVariable(glm::vec2 const& v2) : v2(v2), type(Vec2) {}
 	ShaderVariable(glm::vec3 const& v3) : v3(v3), type(Vec3) {}
 	ShaderVariable(glm::vec4 const& v4) : v4(v4), type(Vec4) {}
 	ShaderVariable(glm::mat3x3 const& m3) : m3(m3), type(Mat3x3) {}
@@ -28,7 +30,7 @@ struct ShaderVariable
 
 	ShaderVariable& operator+=(ShaderVariable const& other) {
 		assert(type == other.type);
-		static int sizes[] = {1, 3, 4, 9, 16};
+		static int sizes[] = {1, 2, 3, 4, 9, 16};
 		int size = sizes[type];
 		float* pf = &f;
 		float const* pfother = &other.f;
@@ -39,8 +41,20 @@ struct ShaderVariable
 		return *this;
 	}
 
+	ShaderVariable& operator *= (float x) {
+		static int sizes[] = {1, 2, 3, 4, 9, 16};
+		int size = sizes[type];
+		float* pf = &f;
+		for (int i = 0; i < size; ++i) {
+			pf[i] *= x;
+		}
+
+		return *this;
+	}
+
 	union {
 		float f;
+		glm::vec2 v2;
 		glm::vec3 v3;
 		glm::vec4 v4;
 		glm::mat3x3 m3;
