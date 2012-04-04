@@ -15,15 +15,21 @@ OBJECTS= $(addprefix $(OBJ_DIR)/, \
 		$(patsubst %.c, %.o, $(SOURCES))))
 EXECUTABLE=software-rasterizer
 
+ifeq ($(BUILD), release)
+	COMMON_FLAGS += -O2 -s -DNDEBUG
+else
+	COMMON_FLAGS += -O0 -g -DDEBUG
+endif
+
 CFLAGS += ${INCLUDE_FLAGS}
 CFLAGS += ${COMMON_FLAGS}
 CXXFLAGS += ${INCLUDE_FLAGS}
-CXXFLAGS += ${COMMON_FLAGS}
+CXXFLAGS += ${COMMON_FLAGS}	
 
 all: $(EXECUTABLE)
 
-debug: CFLAGS += -DDEBUG -g
-debug: $(EXECUTABLE)
+release:
+	make "BUILD=release"
 
 $(EXECUTABLE): $(OBJECTS)
 	@mkdir -p $(BIN_DIR)

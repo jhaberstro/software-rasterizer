@@ -62,9 +62,10 @@ inline size_t Framebuffer::bytes_per_pixel() const {
 }
 
 inline void Framebuffer::clear(void const* value) {
-	for (size_t y = 0; y < _height; ++y) {
-		for (size_t x = 0; x < _width; ++x) {
-			this->set_pixel(x, y, value);
+	uint8_t* val = (uint8_t*)value;
+	for (size_t i = 0; i < _height * _width * _bytesPerPixel; i += _bytesPerPixel) {
+		for (int j = 0; j < _bytesPerPixel; ++j) {
+			_pixels[i + j] = val[j];
 		}
 	}
 }
@@ -72,7 +73,11 @@ inline void Framebuffer::clear(void const* value) {
 inline void Framebuffer::set_pixel(size_t x, size_t y, void const* pixel) {
 	assert(x >= 0 && x < _width);
 	assert(y >= 0 && y < _height);
-	std::memcpy(_pixels + (y * _width * _bytesPerPixel) + (x * _bytesPerPixel), pixel, _bytesPerPixel);
+	uint8_t* p = (uint8_t*)pixel;
+	size_t offset = (y * _width * _bytesPerPixel) + (x * _bytesPerPixel);
+	for (size_t i = 0; i < _bytesPerPixel; ++i, ++offset) {
+		_pixels[offset] = p[i];
+	}
 }
 
 inline void Framebuffer::set_row(size_t row, void const* rowPixels) {

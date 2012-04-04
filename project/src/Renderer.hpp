@@ -13,6 +13,12 @@ enum class PrimitiveTopology
 	TriangleStrip
 };
 
+enum class PolygonWinding
+{
+	Clockwise,
+	CounterClockwise
+};
+
 struct Viewport
 {
 	size_t x, y, w, h;
@@ -45,6 +51,8 @@ public:
 
 	void set_primitive_topology(PrimitiveTopology topology);
 
+	void set_polygon_winding(PolygonWinding winding);
+
 	Framebuffer& framebuffer();
 
 	Framebuffer const& framebuffer() const;
@@ -57,6 +65,8 @@ public:
 
 	PrimitiveTopology primitive_topology() const;
 
+	PolygonWinding polygon_winding() const;
+
 private:
 
 	Viewport _viewport;
@@ -64,6 +74,7 @@ private:
 	Framebuffer* _depthBuffer;	
 	RasteriserFunc _rasterf;
 	PrimitiveTopology _primitiveTopology;
+	PolygonWinding _winding;
 
 	Shader* _currentVsh;
 	Shader* _currentFsh;
@@ -72,7 +83,8 @@ private:
 
 inline Renderer::Renderer()
 : _rasterf(default_rasteriser),
-  _primitiveTopology(PrimitiveTopology::TriangleList) {
+  _primitiveTopology(PrimitiveTopology::TriangleList),
+  _winding(PolygonWinding::CounterClockwise) {
 	_viewport.near = 0.0f;
 	_viewport.far = 1.0f;
 }
@@ -110,6 +122,10 @@ inline void Renderer::set_primitive_topology(PrimitiveTopology topology) {
 	_primitiveTopology = topology;
 }
 
+inline void Renderer::set_polygon_winding(PolygonWinding winding) {
+	_winding = winding;
+}
+
 inline Framebuffer& Renderer::framebuffer() {
 	return *_framebuffer;
 }
@@ -132,6 +148,10 @@ inline Viewport const& Renderer::viewport() const {
 
 inline PrimitiveTopology Renderer::primitive_topology() const {
 	return _primitiveTopology;
+}
+
+inline PolygonWinding Renderer::polygon_winding() const {
+	return _winding;
 }
 
 #endif // JHSR_RENDERER_HPP

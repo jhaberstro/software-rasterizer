@@ -4,7 +4,7 @@
 #include <cassert>
 
 inline void process_vert(Renderer& renderer, glm::vec4& processedVert, VaryingData& vshOutput) {
-	assert(vshOutput[0].type == Vec4);
+	assert(vshOutput[0].size == 4);
 	glm::vec4& vert = vshOutput[0].v4;
 
 	// calculate normalized device coordinates
@@ -41,6 +41,11 @@ void Renderer::draw(const std::vector< VertexArray > const& attributes, size_t s
 	}
 	else {
 		assert(false);
+	}
+
+	if (_winding == PolygonWinding::Clockwise) {
+		std::swap(indices1[1], indices1[2]);
+		std::swap(indices2[1], indices2[2]);
 	}
 
 	for (size_t i = start + startOffset; i < (start + num); i += increment) {

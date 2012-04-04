@@ -23,7 +23,32 @@ enum : size_t
 	HEIGHT = 480
 };
 
+void calculateFPS()
+{
+    static int frameCount = 0, previousTime = 0;
+    //  Increase frame count
+    frameCount++;
 
+    //  Get the number of milliseconds since glutInit called
+    //  (or first callr to glutGet(GLUT ELAPSED TIME)).
+    int currentTime = glutGet(GLUT_ELAPSED_TIME);
+
+    //  Calculate time passed
+    int timeInterval = currentTime - previousTime;
+
+    if(timeInterval > 1000)
+    {
+        //  calculate the number of frames per second
+        float fps = frameCount / (timeInterval / 1000.0f);
+        printf("fps: %f\n", fps);
+
+        //  Set time
+        previousTime = currentTime;
+
+        //  Reset frame count
+        frameCount = 0;
+    }
+}
 
 VaryingData vsh_func(size_t vindex, std::vector< VertexArray > const& attributes, std::vector< ShaderVariable > const& uniforms) {
     auto& position   = reinterpret_cast< glm::vec3* >(attributes[0].vertices)[vindex];
@@ -50,7 +75,7 @@ glm::vec4 fsh_func(ShaderVariable* varyings, std::vector< ShaderVariable > const
 
 void init(void) {
     texture.data = nullptr;
-    texture.data = stbi_load("/Users/jhaberstro/Personal-Projects/software-rasterizer/project/bin/texture.png", &texture.width, &texture.height, &texture.numChannels, 4);
+    texture.data = stbi_load("/Users/jhaberstro/Personal-Projects/software-rasterizer/project/bin/NeHe.png", &texture.width, &texture.height, &texture.numChannels, 4);
     assert(texture.data != nullptr);
 
     renderer.set_framebuffer(WIDTH, HEIGHT, 4);
@@ -114,7 +139,7 @@ void draw() {
 
     static int angle = 0;
     angle = (angle + 1) % 360;
-    auto modelview = glm::translate(glm::mat4x4(), glm::vec3(0.0f, 0.0f, -3.5f)) * glm::rotate(glm::mat4x4(), float(angle), glm::vec3(1.0f, 0.0f, 0.0f));
+    auto modelview = glm::translate(glm::mat4x4(), glm::vec3(0.0f, 0.0f, -3.5f)) * glm::rotate(glm::mat4x4(), float(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     auto projection = glm::perspective(60.0f, static_cast< float >(WIDTH) / static_cast< float >(HEIGHT), 0.1f, 100.0f);
     Shader vsh(vsh_func), fsh(fsh_func);
     vsh.uniforms.push_back(modelview);
@@ -125,9 +150,6 @@ void draw() {
 
     renderer.set_primitive_topology(PrimitiveTopology::TriangleStrip);
     renderer.draw(attributes, 0, 4);
-
-    // vsh.uniforms[0] = glm::translate(vsh.uniforms[0].m4, glm::vec3(1.7f, 0.0f, -0.01f));
-    // renderer.draw(attributes, 0, 3);
 
     glBindTexture(GL_TEXTURE_2D, framebuffer_tex);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, framebuffer.width(), framebuffer.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, framebuffer.pixels());
@@ -150,6 +172,8 @@ void display(void) {
 
     glFinish();
     glutSwapBuffers();
+
+    calculateFPS();
 }
 
 void reshape(int width, int height) {

@@ -23,7 +23,7 @@ inline std::tuple< T, T, T > calculate_gradients(T const& u0, T const& u1, T con
 }
 
 #define CALC_DELTAS(u0, u1, u2, rp0, rp1, rp2, minx, miny) {                                                            \
-        decltype(u0) dvdx, dvdy, cv;                                                                            \
+        decltype(u0) dvdx, dvdy, cv;                                                                                    \
         std::tie(dvdx, dvdy, cv) = calculate_gradients(u0, u1, u2, rp0, rp1, rp2, minx, miny);                          \
         interpolatedVaryings.push_back(cv);                                                                             \
         xgradients.push_back(dvdx);                                                                                     \
@@ -86,13 +86,13 @@ void default_rasteriser(Renderer* renderer, Shader const& fsh, TriangleData& tri
         ShaderVariable& sv0 = varying0[i];
         ShaderVariable& sv1 = varying1[i];
         ShaderVariable& sv2 = varying2[i];                                                                             
-        switch(sv0.type) {
-            case Float:  { CALC_DELTAS(sv0.f  * p0.w, sv1.f  * p1.w, sv2.f  * p2.w, p0, p1, p2, minx, miny); break; }
-            case Vec2:   { CALC_DELTAS(sv0.v2 * p0.w, sv1.v2 * p1.w, sv2.v2 * p2.w, p0, p1, p2, minx, miny); break; }
-            case Vec3:   { CALC_DELTAS(sv0.v3 * p0.w, sv1.v3 * p1.w, sv2.v3 * p2.w, p0, p1, p2, minx, miny); break; }
-            case Vec4:   { CALC_DELTAS(sv0.v4 * p0.w, sv1.v4 * p1.w, sv2.v4 * p2.w, p0, p1, p2, minx, miny); break; }
-            case Mat3x3: { CALC_DELTAS(sv0.m3 * p0.w, sv1.m3 * p1.w, sv2.m3 * p2.w, p0, p1, p2, minx, miny); break; }
-            case Mat4x4: { CALC_DELTAS(sv0.m4 * p0.w, sv1.m4 * p1.w, sv2.m4 * p2.w, p0, p1, p2, minx, miny); break; }
+        switch(sv0.size) {
+            case 1:  { CALC_DELTAS(sv0.f  * p0.w, sv1.f  * p1.w, sv2.f  * p2.w, p0, p1, p2, minx, miny); break; }
+            case 2:  { CALC_DELTAS(sv0.v2 * p0.w, sv1.v2 * p1.w, sv2.v2 * p2.w, p0, p1, p2, minx, miny); break; }
+            case 3:  { CALC_DELTAS(sv0.v3 * p0.w, sv1.v3 * p1.w, sv2.v3 * p2.w, p0, p1, p2, minx, miny); break; }
+            case 4:  { CALC_DELTAS(sv0.v4 * p0.w, sv1.v4 * p1.w, sv2.v4 * p2.w, p0, p1, p2, minx, miny); break; }
+            case 9:  { CALC_DELTAS(sv0.m3 * p0.w, sv1.m3 * p1.w, sv2.m3 * p2.w, p0, p1, p2, minx, miny); break; }
+            case 16: { CALC_DELTAS(sv0.m4 * p0.w, sv1.m4 * p1.w, sv2.m4 * p2.w, p0, p1, p2, minx, miny); break; }
             default:     { assert(false); break; }
         }
     }
@@ -112,7 +112,8 @@ void default_rasteriser(Renderer* renderer, Shader const& fsh, TriangleData& tri
                 float currentDepth;
                 renderer->depth_buffer().get_pixel(x, y, &currentDepth);
                 if (z <= currentDepth) {
-                    for (int i = 0; i < interpolatedVaryings.size(); ++i) varyings[i] *= 1.0f / w;
+                    float realw = 1.0f / w;
+                    for (int i = 0; i < interpolatedVaryings.size(); ++i) varyings[i] *= realw;
                     glm::vec4 color = fsh.ffunc(varyings, fsh.uniforms);
                     for (int i = 0; i < interpolatedVaryings.size(); ++i) varyings[i] *= w;
                     color *= glm::vec4(255.0f);
