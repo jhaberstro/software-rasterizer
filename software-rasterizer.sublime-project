@@ -22,6 +22,7 @@
 	        // "-I/usr/lib/gcc/i686-apple-darwin11/4.2.1/include/",
 	        "-isystem external/libcxx/include/",
 	        "-I/Users/jhaberstro/Personal-Projects/software-rasterizer/project/external/glm/",
+	        "-I/Users/jhaberstro/Personal-Projects/software-rasterizer/project/external/stb_image/",
 	        //"-I/usr/lib/include/c++/v1/",
 	        "-I/usr/lib/clang/3.1/include/",
 	        "-isysroot", "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk"

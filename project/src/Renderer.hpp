@@ -28,6 +28,7 @@ struct Viewport
 class Renderer
 {
 	friend class Pipeline;
+	enum : int { MAX_ATTRIBUTES = 10 };
 
 public:
 
@@ -35,7 +36,11 @@ public:
 
 	~Renderer();
 
-	void draw(std::vector< VertexArray > const& attributes, size_t start, size_t num);
+	void draw(size_t start, size_t num);
+
+	void draw_indexed(size_t start, size_t num, int32_t* indices);
+
+	void set_attribute(int index, int components, size_t stride, void* ptr);
 
 	void set_vertex_shader(Shader& vsh);
 
@@ -67,7 +72,11 @@ public:
 
 	PolygonWinding polygon_winding() const;
 
+	int max_attributes() const;
+
 private:
+
+	VertexArray _attributes[MAX_ATTRIBUTES];
 
 	Viewport _viewport;
 	Framebuffer* _framebuffer;
@@ -92,6 +101,16 @@ inline Renderer::Renderer()
 inline Renderer::~Renderer() {
 	if (_framebuffer) delete _framebuffer;
 	if (_depthBuffer) delete _depthBuffer;
+}
+
+inline void Renderer::set_attribute(int index, int components, size_t stride, void *ptr) {
+	assert(index >= 0);
+	assert(index < MAX_ATTRIBUTES);
+	assert(ptr != nullptr);
+	_attributes[index].elementSize = sizeof(float);
+	_attributes[index].components = components;
+	_attributes[index].stride = stride;
+	_attributes[index].vertices = ptr;
 }
 
 inline void Renderer::set_vertex_shader(Shader &vsh) {
@@ -153,5 +172,10 @@ inline PrimitiveTopology Renderer::primitive_topology() const {
 inline PolygonWinding Renderer::polygon_winding() const {
 	return _winding;
 }
+
+inline int Renderer::max_attributes() const {
+	return MAX_ATTRIBUTES;
+}
+
 
 #endif // JHSR_RENDERER_HPP

@@ -1,0 +1,5 @@
+Author: Jedd Haberstro (jhaberstro at gmail.com)
+
+Description: I wrote this project to better understand the 3D rendering pipeline and to try out some C++11 features. It's "shader based" which means you can write your graphics shaders in C++ and just pass the shader as a function pointer to the renderer. It supports texturing/abitrary attribute interpolation, triangle lists and triangle strips, clockwise or counter-clockwise polygon windings, and both indexed vertex data and normal vertex arrays.
+
+This has only been tested on Mac OS X 10.7 and 10.8 with the clang compiler.

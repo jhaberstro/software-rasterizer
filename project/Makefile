@@ -9,7 +9,7 @@ RESOURCE_DIR=resources
 BIN_DIR=bin
 OBJ_DIR=build
 SOURCE_DIR=src
-SOURCES=src/main.cpp src/Framebuffer.cpp src/Renderer.cpp src/DefaultRasteriser.cpp external/stb_image/stb_image.c
+SOURCES=src/main.cpp src/Framebuffer.cpp src/Renderer.cpp src/DefaultRasteriser.cpp src/PLYLoader.cpp external/stb_image/stb_image.c
 OBJECTS= $(addprefix $(OBJ_DIR)/, \
 		$(patsubst %.cpp, %.o,  \
 		$(patsubst %.c, %.o, $(SOURCES))))

@@ -4,6 +4,378 @@
 		"selected_items":
 		[
 			[
+				"Tri",
+				"TriangleStrip	PrimitiveTopology"
+			],
+			[
+				"Trian",
+				"TriangleStrip	PrimitiveTopology"
+			],
+			[
+				"draw",
+				"draw_indexed(size_t start, size_t num, int32_t *indices)	void"
+			],
+			[
+				"in",
+				"indices	std::vector<int>"
+			],
+			[
+				"uvec",
+				"uvec4	"
+			],
+			[
+				"elemen",
+				"elementCallback	plymodel_start_element"
+			],
+			[
+				"inc",
+				"include <header>	"
+			],
+			[
+				"s",
+				"basic_string(_InputIterator __first, _InputIterator __last)	void"
+			],
+			[
+				"element",
+				"element_description_build_format_str(const <anonymous>::ElementDescription &ed)	std::string"
+			],
+			[
+				"pro",
+				"propertyIndex	size_t"
+			],
+			[
+				"size",
+				"size_t	"
+			],
+			[
+				"fpr",
+				"fprintf(FILE *, const char *, ...)	int"
+			],
+			[
+				"file",
+				"filepath	const std::string &"
+			],
+			[
+				"plymod",
+				"plymodel_load(const std::string &filepath, plymodel_start_element elementCallback, plymodel_read_property_stream propertyCallback)	PlyModel *"
+			],
+			[
+				"elem",
+				"elementDescriptions	std::vector<ElementDescription>"
+			],
+			[
+				"read",
+				"readingHeader	bool"
+			],
+			[
+				"elementN",
+				"elementName	char [64]"
+			],
+			[
+				"elementNam",
+				"elementNameSize	int"
+			],
+			[
+				"eleme",
+				"elementFormatStr	std::string"
+			],
+			[
+				"num",
+				"numVertices	int"
+			],
+			[
+				"fer",
+				"ferror(FILE *)	int"
+			],
+			[
+				"fget",
+				"fgets(char *, int, FILE *)	char *"
+			],
+			[
+				"feof",
+				"feof(FILE *)	int"
+			],
+			[
+				"ic",
+				"include \"header\"	"
+			],
+			[
+				"def",
+				"define macro	"
+			],
+			[
+				"ve",
+				"vector<class _Tp>	"
+			],
+			[
+				"siz",
+				"sizeof(expression-or-type)	"
+			],
+			[
+				"co",
+				"colors	glm::vec4 [4]"
+			],
+			[
+				"Ver",
+				"VertexArray	"
+			],
+			[
+				"Verte",
+				"VertexArray	"
+			],
+			[
+				"Vert",
+				"VertexPositionUV	"
+			],
+			[
+				"indc",
+				"indices1	size_t [3]"
+			],
+			[
+				"x",
+				"xgradients	VaryingData"
+			],
+			[
+				"ive",
+				"ivec2	"
+			],
+			[
+				"st",
+				"stb_image"
+			],
+			[
+				"r",
+				"rep() const	int32_t"
+			],
+			[
+				"re",
+				"_rep	int32_t"
+			],
+			[
+				"to",
+				"to_int() const	int32_t"
+			],
+			[
+				"fmin",
+				"fminy	float_fp"
+			],
+			[
+				"fma",
+				"fmaxy	float_fp"
+			],
+			[
+				"flo",
+				"float_fp	"
+			],
+			[
+				"float",
+				"float_fp	"
+			],
+			[
+				"floa",
+				"float_fp	"
+			],
+			[
+				"Fixed",
+				"FixedPointVector3	"
+			],
+			[
+				"glE",
+				"glEquivalient()	void"
+			],
+			[
+				"GL_TRIANG",
+				"GL_TRIANGLE_STRIP	"
+			],
+			[
+				"glLoadM",
+				"glLoadMatrixf(const GLfloat *m)	void"
+			],
+			[
+				"glMult",
+				"glMultMatrixf(const GLfloat *m)	void"
+			],
+			[
+				"Mat",
+				"Mat3x3	ShaderDataType"
+			],
+			[
+				"int",
+				"int32_t	"
+			],
+			[
+				"min",
+				"miny	float_fp"
+			],
+			[
+				"max",
+				"maxy	float_fp"
+			],
+			[
+				"Fixe",
+				"FixedPointReal<int Precision>	"
+			],
+			[
+				"Fix",
+				"FixedPointReal<int Precision>	"
+			],
+			[
+				"incl",
+				"include <header>	"
+			],
+			[
+				"Fi",
+				"FixedPointVector3	"
+			],
+			[
+				"pri",
+				"private:	"
+			],
+			[
+				"ind",
+				"indices2	size_t [3]"
+			],
+			[
+				"indi",
+				"indices1	size_t [3]"
+			],
+			[
+				"prin",
+				"printf	printf …"
+			],
+			[
+				"start",
+				"startOffset	size_t"
+			],
+			[
+				"Tria",
+				"TriangleStrip	PrimitiveTopology"
+			],
+			[
+				"T",
+				"TriangleStrip	PrimitiveTopology"
+			],
+			[
+				"_curr",
+				"_currentFsh	Shader *"
+			],
+			[
+				"_current",
+				"_currentVsh	Shader *"
+			],
+			[
+				"_curren",
+				"_currentVsh	Shader *"
+			],
+			[
+				"includ",
+				"include \"header\"	"
+			],
+			[
+				"_cur",
+				"_currentVsh	Shader *"
+			],
+			[
+				"vec",
+				"vec3	"
+			],
+			[
+				"var",
+				"varyings	ShaderVariable *"
+			],
+			[
+				"vary",
+				"varyings	std::vector<ShaderVariable>"
+			],
+			[
+				"dvd",
+				"dvdy	glm::vec4"
+			],
+			[
+				"dv",
+				"dv4dy	glm::vec4"
+			],
+			[
+				"dv4",
+				"dv4dx	glm::vec4"
+			],
+			[
+				"Shad",
+				"ShaderVariable	"
+			],
+			[
+				"dv4d",
+				"dv4dy	glm::vec4"
+			],
+			[
+				"get_trian",
+				"get_triangle_varying0(TriangleData &vd)	VaryingData &"
+			],
+			[
+				"Sha",
+				"ShaderVariable	"
+			],
+			[
+				"GL_DEPTH32",
+				"GL_DEPTH_COMPONENT32F	"
+			],
+			[
+				"wi",
+				"set_row(size_t row, const uint8_t *rowPixels)	void"
+			],
+			[
+				"dep",
+				"depth_buffer() const	const Framebuffer &"
+			],
+			[
+				"set",
+				"set_pixel(size_t x, size_t y, const uint8_t *pixel)	void"
+			],
+			[
+				"for",
+				"for	For Loop"
+			],
+			[
+				"Ve",
+				"VertexArray	"
+			],
+			[
+				"dzd",
+				"dzdx	float"
+			],
+			[
+				"dz",
+				"dzdy	float"
+			],
+			[
+				"cro",
+				"cross(const detail::tvec3<valType> &x, const detail::tvec3<valType> &y)	detail::tvec3<valType>"
+			],
+			[
+				"str",
+				"stride(args)	"
+			],
+			[
+				"p",
+				"push_back(const_reference __x)	void"
+			],
+			[
+				"Ma",
+				"Mat4x4	ShaderDataType"
+			],
+			[
+				"Vec",
+				"Vec3	ShaderDataType"
+			],
+			[
+				"persp",
+				"perspective(const T &fovy, const T &aspect, const T &near, const T &far)	detail::tmat4x4<T>"
+			],
+			[
+				"mat4",
+				"mat4x4	"
+			],
+			[
 				"dy",
 				"dy01	float"
 			],
@@ -24,10 +396,6 @@
 				"edge20	float"
 			],
 			[
-				"set",
-				"set_pixel(size_t x, size_t y, const uint8_t *pixel)	void"
-			],
-			[
 				"fab",
 				"fabsf(float)	float"
 			],
@@ -40,10 +408,6 @@
 				"viewport() const	const Viewport &"
 			],
 			[
-				"dep",
-				"depth_buffer()	Framebuffer &"
-			],
-			[
 				"depth",
 				"depth_buffer()	Framebuffer &"
 			],
@@ -52,36 +416,12 @@
 				"uint8_t	"
 			],
 			[
-				"Ve",
-				"Vec3	ShaderDataType"
-			],
-			[
 				"swi",
 				"swizzle(glm::comp X, glm::comp Y)	tref2<float>"
 			],
 			[
-				"Trian",
-				"TriangleArea(glm::vec3 &v0, glm::vec3 &v1, glm::vec3 &v2)	float"
-			],
-			[
-				"ve",
-				"vec3	"
-			],
-			[
-				"get_trian",
-				"get_triangle_vert0(TriangleData &vd)	glm::vec3 &"
-			],
-			[
-				"incl",
-				"include \"header\"	"
-			],
-			[
 				"Draw",
 				"DrawFlatBottomTriangle(Framebuffer &fb, glm::vec2 p0, glm::vec2 p1, glm::vec2 p2)	void"
-			],
-			[
-				"for",
-				"forv	Vector For Loop"
 			],
 			[
 				"se",
@@ -100,10 +440,6 @@
 				"sidesPoints	glm::vec2 [3][3]"
 			],
 			[
-				"includ",
-				"include <header>	"
-			],
-			[
 				"SID",
 				"SIDE_12	enum <anonymous>"
 			],
@@ -112,24 +448,12 @@
 				"SIDE_01	enum <anonymous>"
 			],
 			[
-				"def",
-				"default:	"
-			],
-			[
-				"inc",
-				"include <header>	"
-			],
-			[
 				"dra",
 				"drawCall	DrawCall *"
 			],
 			[
 				"fram",
 				"framebuffer() const	const Framebuffer &"
-			],
-			[
-				"Vec",
-				"Vec4	ShaderDataType"
 			],
 			[
 				"vsh",
@@ -172,16 +496,8 @@
 				"back() const	const_reference"
 			],
 			[
-				"float",
-				"float_t	"
-			],
-			[
 				"Pip",
 				"PipelineStageFunc	"
-			],
-			[
-				"read",
-				"read_fbo	GLuint"
 			],
 			[
 				"GL_READ",
@@ -198,98 +514,6 @@
 			[
 				"strcp",
 				"strcpy(char *, const char *)	char *"
-			],
-			[
-				"leftS",
-				"leftSize"
-			],
-			[
-				"righ",
-				"rightSize"
-			],
-			[
-				"left",
-				"leftSorted"
-			],
-			[
-				"size",
-				"size_t	"
-			],
-			[
-				"ski",
-				"skiplist_t	"
-			],
-			[
-				"initWit",
-				"insertValue:(id) inPropertyWithKey:(NSString *)	void"
-			],
-			[
-				"cur",
-				"current	skiplist_t::internal_node_t *"
-			],
-			[
-				"curr",
-				"currentLevel"
-			],
-			[
-				"linke",
-				"linkedlist	linked_node_t<T> *"
-			],
-			[
-				"linked",
-				"linked_node_t<typename T>	"
-			],
-			[
-				"link",
-				"linked_node_t<typename T>	"
-			],
-			[
-				"print",
-				"print_level"
-			],
-			[
-				"skip",
-				"skiplist"
-			],
-			[
-				"pri",
-				"printf	printf …"
-			],
-			[
-				"int",
-				"int_linked_node_t"
-			],
-			[
-				"li",
-				"linked_node_t"
-			],
-			[
-				"include",
-				"include <header>	"
-			],
-			[
-				"merg",
-				"mergesort"
-			],
-			[
-				"st",
-				"start"
-			],
-			[
-				"meg",
-				"mergesort_internal"
-			],
-			[
-				"cl",
-				"clGetPlatformInfo(int platform, int param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret)	int"
-			],
-			[
-				"dictionarWithObj",
-				"dictionaryWithObjects:(NSArray *) forKeys:(NSArray *)	id"
-			],
-			[
-				"lin",
-				"lineString"
 			]
 		]
 	},
@@ -299,7 +523,31 @@
 			"file": "project/src/main.cpp",
 			"settings":
 			{
-				"buffer_size": 3937,
+				"buffer_size": 11266,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "project/src/PLYLoader.hpp",
+			"settings":
+			{
+				"buffer_size": 709,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "project/src/PLYLoader.cpp",
+			"settings":
+			{
+				"buffer_size": 5030,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "software-rasterizer.sublime-project",
+			"settings":
+			{
+				"buffer_size": 1172,
 				"line_ending": "Unix"
 			}
 		},
@@ -307,7 +555,79 @@
 			"file": "project/src/DefaultRasteriser.cpp",
 			"settings":
 			{
-				"buffer_size": 4454,
+				"buffer_size": 7555,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "project/src/FixedPointMath.hpp",
+			"settings":
+			{
+				"buffer_size": 1758,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "project/src/DefaultRasteriser.hpp",
+			"settings":
+			{
+				"buffer_size": 1031,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "project/src/Renderer.hpp",
+			"settings":
+			{
+				"buffer_size": 3776,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "project/src/Renderer.cpp",
+			"settings":
+			{
+				"buffer_size": 4013,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "project/src/Shader.hpp",
+			"settings":
+			{
+				"buffer_size": 2069,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "project/src/VertexArray.hpp",
+			"settings":
+			{
+				"buffer_size": 815,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "project/src/Framebuffer.hpp",
+			"settings":
+			{
+				"buffer_size": 2350,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "project/resources.txt",
+			"settings":
+			{
+				"buffer_size": 1882,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "project/Makefile",
+			"settings":
+			{
+				"buffer_size": 1387,
 				"line_ending": "Unix"
 			}
 		}
@@ -315,12 +635,16 @@
 	"build_system": "Packages/Makefile/Make.sublime-build",
 	"command_palette":
 	{
-		"height": 392.0,
+		"height": 327.0,
 		"selected_items":
 		[
 			[
 				":w",
 				":w - Save"
+			],
+			[
+				"Pack",
+				"Package Control: Remove Package"
 			],
 			[
 				":",
@@ -395,10 +719,6 @@
 				"Package Control: Install Package"
 			],
 			[
-				"Pack",
-				"Package Control: List Packages"
-			],
-			[
 				"Package Control:",
 				"Package Control: Upgrade Package"
 			]
@@ -420,21 +740,31 @@
 	},
 	"file_history":
 	[
-		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/main.cpp",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/bin/x-wing.ply",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/bin/statue.ply",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/external/glm/glm/gtx/matrix_interpolation.hpp",
+		"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/v1/string",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/ModelLoaders.hpp",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/Makefile",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Framebuffer.cpp",
 		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/resources.txt",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/external/stb_image/stb_image.c",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/DefaultRasteriser.cpp",
 		"/Users/jhaberstro/Personal-Projects/software-rasterizer/software-rasterizer.sublime-project",
-		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Context.cpp",
-		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Context.hpp",
+		"/Users/jhaberstro/Library/Application Support/Sublime Text 2/Packages/SublimeClang/SublimeClang.sublime-settings",
+		"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/v1/algorithm",
+		"/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/usr/include/architecture/i386/math.h",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/external/glm/glm/core/func_integer.hpp",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/external/libcxx/include/algorithm",
 		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Pipeline.hpp",
 		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Pipeline.cpp",
-		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/DefaultRasteriser.cpp",
-		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Framebuffer.cpp",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Context.cpp",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Context.hpp",
 		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/Framebuffer.hpp",
-		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/Makefile",
+		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/main.cpp",
 		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/DefaultRasteriser.hpp",
 		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/DefaultRasteriser",
 		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/DefaultRasterizer.hpp",
-		"/Users/jhaberstro/Library/Application Support/Sublime Text 2/Packages/SublimeClang/SublimeClang.sublime-settings",
 		"/Users/jhaberstro/Library/Application Support/Sublime Text 2/Packages/SublimeClang/Default.sublime-keymap",
 		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/",
 		"/Users/jhaberstro/Personal-Projects/software-rasterizer/project/src/main.h",
@@ -483,6 +813,8 @@
 		"height": 0.0,
 		"where_history":
 		[
+			"<open files>",
+			""
 		]
 	},
 	"find_state":
@@ -490,6 +822,43 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"ElementDescription",
+			"PropertyDescription",
+			"fgets",
+			"memset",
+			"member",
+			"CALC_DELTAS",
+			"cz",
+			"fix_",
+			"base",
+			"p1.z",
+			"/ cv",
+			"interpolatedVaryings",
+			"varyings",
+			"/ z",
+			"/ cz",
+			"process_vert",
+			"fwidth",
+			"INFINITY",
+			"infinite",
+			"p0",
+			"vec3_fp",
+			".rep",
+			"float_fp(",
+			"prefix##",
+			"float",
+			"cz",
+			"operator",
+			"renderer.",
+			"ctx",
+			"context",
+			"ctx",
+			"),",
+			"_context",
+			"ctx",
+			"context",
+			"StateContext",
+			"get_pixel",
 			"x1",
 			"x3",
 			"x2",
@@ -530,6 +899,19 @@
 		"regex": false,
 		"replace_history":
 		[
+			"PlyElementDescription",
+			"PlyPropertyDescription",
+			"fixed_",
+			"fixed_base",
+			".to_int",
+			"prefix ## ",
+			"prefix#",
+			"double",
+			"renderer->",
+			"renderer",
+			"_renderer",
+			"renderer",
+			"Renderer",
 			"v0.x",
 			"v2.x",
 			"v1.x",
@@ -559,7 +941,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -567,15 +949,15 @@
 					"file": "project/src/main.cpp",
 					"settings":
 					{
-						"buffer_size": 3937,
+						"buffer_size": 11266,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2193,
-								2193
+								9550,
+								9550
 							]
 						],
 						"settings":
@@ -585,25 +967,51 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 798.0,
+						"translation.y": 2565.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "project/src/DefaultRasteriser.cpp",
+					"file": "project/src/PLYLoader.hpp",
 					"settings":
 					{
-						"buffer_size": 4454,
+						"buffer_size": 709,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4220,
-								4220
+								521,
+								521
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "project/src/PLYLoader.cpp",
+					"settings":
+					{
+						"buffer_size": 5030,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2350,
+								2350
 							]
 						],
 						"settings":
@@ -612,7 +1020,314 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1014.0,
+						"translation.y": 885.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "software-rasterizer.sublime-project",
+					"settings":
+					{
+						"buffer_size": 1172,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1169,
+								51
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "project/src/DefaultRasteriser.cpp",
+					"settings":
+					{
+						"buffer_size": 7555,
+						"regions":
+						{
+							"bookmark_a":
+							{
+								"flags": 144,
+								"regions":
+								[
+									[
+										7548,
+										7548
+									]
+								]
+							}
+						},
+						"selection":
+						[
+							[
+								5893,
+								5893
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1248.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "project/src/FixedPointMath.hpp",
+					"settings":
+					{
+						"buffer_size": 1758,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1421,
+								1421
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 54.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "project/src/DefaultRasteriser.hpp",
+					"settings":
+					{
+						"buffer_size": 1031,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								502,
+								502
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "project/src/Renderer.hpp",
+					"settings":
+					{
+						"buffer_size": 3776,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								587,
+								587
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 401.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "project/src/Renderer.cpp",
+					"settings":
+					{
+						"buffer_size": 4013,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3246,
+								3257
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1021.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "project/src/Shader.hpp",
+					"settings":
+					{
+						"buffer_size": 2069,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1479,
+								1479
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "project/src/VertexArray.hpp",
+					"settings":
+					{
+						"buffer_size": 815,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								689,
+								689
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "project/src/Framebuffer.hpp",
+					"settings":
+					{
+						"buffer_size": 2350,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2147,
+								2147
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 689.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "project/resources.txt",
+					"settings":
+					{
+						"buffer_size": 1882,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								161,
+								229
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "project/Makefile",
+					"settings":
+					{
+						"buffer_size": 1387,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								487,
+								487
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Makefile/Makefile.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -651,10 +1366,6 @@
 		]
 	},
 	"menu_visible": true,
-	"output.clang":
-	{
-		"height": 100.0
-	},
 	"replace":
 	{
 		"height": 64.0
@@ -666,52 +1377,172 @@
 		"selected_items":
 		[
 			[
-				"def",
-				"src/DefaultRasteriser.cpp"
+				"x",
+				"bin/x-wing.ply"
 			],
 			[
-				"mai",
+				"sta",
+				"bin/statue.ply"
+			],
+			[
+				"stat",
+				"bin/statue.ply"
+			],
+			[
+				"rend",
+				"src/Renderer.cpp"
+			],
+			[
+				"main.c",
+				"src/main.cpp"
+			],
+			[
+				"ply",
+				"src/PLYLoader.cpp"
+			],
+			[
+				"make",
+				"Makefile"
+			],
+			[
+				"main.cp",
 				"src/main.cpp"
 			],
 			[
 				"main",
-				"src/main.cpp"
+				"external/glm/glm/gtx/matrix_interpolation.hpp"
 			],
 			[
-				"frame",
-				"src/Framebuffer.hpp"
+				"model",
+				"src/ModelLoaders.hpp"
 			],
 			[
-				"res",
-				"resources.txt"
+				"",
+				"src/Renderer.hpp"
 			],
 			[
-				"pi",
-				"src/Pipeline.cpp"
+				"ren",
+				"src/Renderer.hpp"
+			],
+			[
+				"shader",
+				"src/Shader.hpp"
+			],
+			[
+				"vert",
+				"src/VertexArray.hpp"
+			],
+			[
+				"ver",
+				"src/VertexArray.hpp"
 			],
 			[
 				"resou",
 				"resources.txt"
 			],
 			[
-				"con",
-				"src/Context.hpp"
+				"m",
+				"Makefile"
 			],
 			[
-				"cont",
-				"src/Context.hpp"
+				"sha",
+				"src/Shader.hpp"
 			],
 			[
-				"c",
-				"src/Context.hpp"
+				"fram",
+				"src/Framebuffer.hpp"
+			],
+			[
+				"fra",
+				"src/Framebuffer.hpp"
+			],
+			[
+				"shad",
+				"src/Shader.hpp"
+			],
+			[
+				"res",
+				"resources.txt"
+			],
+			[
+				"stb_ia",
+				"external/stb_image/stb_image.c"
+			],
+			[
+				"stb",
+				"external/stb_image/stb_image.c"
+			],
+			[
+				"stb_im",
+				"external/stb_image/stb_image.c"
+			],
+			[
+				"ma",
+				"Makefile"
+			],
+			[
+				"defa",
+				"src/DefaultRasteriser.cpp"
+			],
+			[
+				"fixed",
+				"src/FixedPointMath.hpp"
+			],
+			[
+				"def",
+				"src/DefaultRasteriser.cpp"
+			],
+			[
+				"rende",
+				"src/Renderer.cpp"
 			],
 			[
 				"mak",
 				"Makefile"
 			],
 			[
-				"make",
-				"Makefile"
+				"pip",
+				"src/Pipeline.cpp"
+			],
+			[
+				"cont",
+				"src/Context.hpp"
+			],
+			[
+				"pi",
+				"src/Pipeline.cpp"
+			],
+			[
+				"pipe",
+				"src/Pipeline.cpp"
+			],
+			[
+				"f",
+				"src/Framebuffer.cpp"
+			],
+			[
+				"frame",
+				"src/Framebuffer.hpp"
+			],
+			[
+				"p",
+				"src/Pipeline.cpp"
+			],
+			[
+				"con",
+				"src/Context.hpp"
+			],
+			[
+				"context",
+				"src/Context.hpp"
+			],
+			[
+				"mai",
+				"src/main.cpp"
+			],
+			[
+				"c",
+				"src/Context.hpp"
 			],
 			[
 				"default",
@@ -720,14 +1551,6 @@
 			[
 				"defau",
 				"src/DefaultRasteriser.cpp"
-			],
-			[
-				"pip",
-				"src/Pipeline.hpp"
-			],
-			[
-				"context",
-				"src/Context.hpp"
 			],
 			[
 				"context.h",
@@ -742,20 +1565,8 @@
 				"src/Framebuffer.cpp"
 			],
 			[
-				"main.cp",
-				"src/main.cpp"
-			],
-			[
-				"fram",
-				"src/Framebuffer.hpp"
-			],
-			[
 				"frhpp",
 				"src/Framebuffer.hpp"
-			],
-			[
-				"ma",
-				"Makefile"
 			],
 			[
 				"test",
@@ -784,6 +1595,6 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 193.0,
+	"side_bar_width": 204.0,
 	"status_bar_visible": true
 }

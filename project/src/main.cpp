@@ -16,6 +16,24 @@ struct {
     void* data;
     int width, height, numChannels;
 } texture;
+struct {
+    std::vector< glm::vec3 > positions;
+    std::vector< glm::vec2 > texcoords;
+} cylinder;
+
+void CreateCylinder(float height, float radius, int subdiv, std::vector< glm::vec3 >& vertices, std::vector< glm::vec2 >& texcoords) {
+    float ybottom = -height * 0.5f;
+    float dangle = (2.0f * 3.14f) / float(subdiv);
+    for (float angle = 0; angle <= 2.0f * 3.14f; angle += dangle) {
+        glm::vec3 bottom(std::cosf(angle) * radius, ybottom, std::sinf(angle));
+        glm::vec3 top(bottom.x, -bottom.y, bottom.z);
+        float t = angle / (2.0f * 3.14f);
+        vertices.push_back(bottom);
+        vertices.push_back(top);
+        texcoords.push_back(glm::vec2(t, 0.0f));
+        texcoords.push_back(glm::vec2(t, 1.0f));
+    }
+}
 
 enum : size_t
 {
@@ -50,33 +68,34 @@ void calculateFPS()
     }
 }
 
-VaryingData vsh_func(size_t vindex, std::vector< VertexArray > const& attributes, std::vector< ShaderVariable > const& uniforms) {
-    auto& position   = reinterpret_cast< glm::vec3* >(attributes[0].vertices)[vindex];
-    auto& color      = reinterpret_cast< glm::vec4* >(attributes[1].vertices)[vindex];
-    auto& uv         = reinterpret_cast< glm::vec2* >(attributes[2].vertices)[vindex];
+VaryingData vsh_func(size_t vindex, VertexArray* attributes, std::vector< ShaderVariable > const& uniforms) {
+    auto& position   = *reinterpret_cast< glm::vec3* >(attributes[0].index(vindex));
+    auto& uv         = *reinterpret_cast< glm::vec2* >(attributes[1].index(vindex));
     glm::mat4x4 const& modelview  = uniforms[0].m4;
     glm::mat4x4 const& projection = uniforms[1].m4;
 
     VaryingData output;
     output.push_back(projection * modelview * glm::vec4(position.x, position.y, position.z, 1.0f));
-    output.push_back(color);
     output.push_back(uv);
     return output;
 }
 
 glm::vec4 fsh_func(ShaderVariable* varyings, std::vector< ShaderVariable > const& uniforms) {
-    glm::ivec2 st(varyings[1].v2.x * texture.width, varyings[1].v2.y * texture.height);
-    uint32_t* pixels = reinterpret_cast< uint32_t* >(texture.data);
-    uint32_t pcolor = pixels[(st.y * texture.width) + st.x];
-    // return glm::vec4(varyings[1].v2.x, varyings[1].v2.y, 0.0f, 1.0f);
-    return glm::vec4(float(pcolor & 0xff) / 255.0f, float((pcolor >> 8) & 0xff) / 255.0f, float((pcolor >> 16) & 0xff) / 255.0f, float((pcolor >> 24) & 0xff) / 255.0f);
-    // return (varyings[0].v4);
+    struct rgb8 { uint8_t r, g, b; };
+    glm::ivec2 st(varyings[0].v2.x * texture.width, varyings[0].v2.y * texture.height);
+    rgb8* pixels = reinterpret_cast< rgb8* >(texture.data);
+    size_t index = std::min((st.y * texture.width) + st.x, (texture.width * texture.height) - 1);
+    rgb8 pcolor = pixels[index];
+    return glm::vec4(pcolor.r / 255.0f, pcolor.g / 255.0f, pcolor.b / 255.0f, 255.0f);
 }
 
 void init(void) {
     texture.data = nullptr;
-    texture.data = stbi_load("/Users/jhaberstro/Personal-Projects/software-rasterizer/project/bin/NeHe.png", &texture.width, &texture.height, &texture.numChannels, 4);
+    texture.data = stbi_load("Nehe.png", &texture.width, &texture.height, &texture.numChannels, 3);
+    std::printf("Num channels: %i\n", texture.numChannels);
     assert(texture.data != nullptr);
+
+    CreateCylinder(1.0f, 1.0f, 100, cylinder.positions, cylinder.texcoords);
 
     renderer.set_framebuffer(WIDTH, HEIGHT, 4);
     renderer.set_viewport(0, 0, WIDTH, HEIGHT);
@@ -96,46 +115,11 @@ void init(void) {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void GLEquivalient() {
-    auto modelview = glm::translate(glm::mat4x4(), glm::vec3(0.0f, 0.0f, -3.5f)) * glm::rotate(glm::mat4x4(), float(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    auto projection = glm::perspective(60.0f, static_cast< float >(WIDTH) / static_cast< float >(HEIGHT), 0.1f, 100.0f);
+void draw_quad() {
     glm::vec3 positions[] = {glm::vec3(-1.0f, -1.0f, 0.0f), glm::vec3(1.0f, -1.0f, 0.0f), glm::vec3(-1.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) };
-    glm::vec4 colors[] = { glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(1.0f) };
-    glViewport(0, 0, WIDTH, HEIGHT);
-    glMatrixMode(GL_PROJECTION);
-    glLoadMatrixf(&projection[0][0]);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixf(&modelview[0][0]);
-    glEnable(GL_DEPTH_TEST);
-
-    glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glBegin(GL_TRIANGLE_STRIP);
-    for (int i = 0; i < sizeof(positions) / sizeof(positions[0]); ++i) {
-        glColor4fv((GLfloat*)(colors + i));
-        glVertex3fv((GLfloat*)(positions + i));
-    }
-    glEnd();
-}
-
-void draw() {
-    uint32_t clearColor = 0x00000000;
-    float depthClear = INFINITY;
-    renderer.depth_buffer().clear(&depthClear);
-    Framebuffer& framebuffer = renderer.framebuffer();
-    framebuffer.clear(&clearColor);
-
-    glm::vec3 positions[] = {glm::vec3(-1.0f, -1.0f, 0.0f), glm::vec3(1.0f, -1.0f, 0.0f), glm::vec3(-1.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f) };
-    glm::vec4 colors[] = { glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec4(1.0f) };
     glm::vec2 uvs[] = { glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec2(1.0f, 1.0f) };
-    VertexArray pa(3, 0, positions);
-    VertexArray ca(4, 0, colors);
-    VertexArray ta(2, 0, uvs);
-    std::vector< VertexArray > attributes;
-    attributes.push_back(pa);
-    attributes.push_back(ca);
-    attributes.push_back(ta);
+    renderer.set_attribute(0, 3, 0, positions);
+    renderer.set_attribute(1, 2, 0, uvs);
 
     static int angle = 0;
     angle = (angle + 1) % 360;
@@ -148,8 +132,41 @@ void draw() {
     renderer.set_vertex_shader(vsh);
     renderer.set_fragment_shader(fsh);
 
+    renderer.set_polygon_winding(PolygonWinding::CounterClockwise);
     renderer.set_primitive_topology(PrimitiveTopology::TriangleStrip);
-    renderer.draw(attributes, 0, 4);
+    renderer.draw(0, 4);
+}
+
+void draw_cylinder() {
+    renderer.set_attribute(0, 3, 0, &cylinder.positions[0].x);
+    renderer.set_attribute(1, 2, 0, &cylinder.texcoords[0].x);
+
+    static int angle = 0;
+    angle = (angle + 1) % 360;
+    auto modelview = glm::translate(glm::mat4x4(), glm::vec3(0.0f, 0.0f, -3.5f)) * glm::rotate(glm::mat4x4(), float(angle), glm::vec3(1.0f, 0.0f, 0.0f));
+    auto projection = glm::perspective(60.0f, static_cast< float >(WIDTH) / static_cast< float >(HEIGHT), 0.1f, 100.0f);
+    Shader vsh(vsh_func), fsh(fsh_func);
+    vsh.uniforms.push_back(modelview);
+    vsh.uniforms.push_back(projection);
+
+    renderer.set_vertex_shader(vsh);
+    renderer.set_fragment_shader(fsh);
+    renderer.set_primitive_topology(PrimitiveTopology::TriangleStrip);
+    renderer.set_polygon_winding(PolygonWinding::CounterClockwise);
+    renderer.draw(0, cylinder.positions.size());
+    renderer.set_polygon_winding(PolygonWinding::Clockwise);
+    renderer.draw(0, cylinder.positions.size());
+}
+
+void draw() {
+    uint32_t clearColor = 0x00000000;
+    float depthClear = INFINITY;
+    renderer.depth_buffer().clear(&depthClear);
+    Framebuffer& framebuffer = renderer.framebuffer();
+    framebuffer.clear(&clearColor);
+
+    //draw_quad();
+    draw_cylinder();
 
     glBindTexture(GL_TEXTURE_2D, framebuffer_tex);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, framebuffer.width(), framebuffer.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, framebuffer.pixels());

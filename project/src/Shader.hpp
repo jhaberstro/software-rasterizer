@@ -50,7 +50,7 @@ struct ShaderVariable
 
 typedef std::vector< ShaderVariable > VaryingData;
 // first element of returned vector of VertShaderFunc must be the output position
-typedef VaryingData (*VertShaderFunc) (size_t vindex, std::vector< VertexArray > const& attributes, std::vector< ShaderVariable > const& uniforms);
+typedef VaryingData (*VertShaderFunc) (size_t vindex, VertexArray* attributes, std::vector< ShaderVariable > const& uniforms);
 typedef glm::vec4 (*FragShaderFunc) (ShaderVariable* varyings, std::vector< ShaderVariable > const& uniforms);
 
 // The thought is that since author of the shader is responsible
